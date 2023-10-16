@@ -20,7 +20,6 @@ const brute = (endLength = 5) => {
 
     while (true) {
       const password = generatePassword(indexes);
-      console.log(indexes);
 
       if (login(password)) {
         console.log(`Password found: ${password}`);
