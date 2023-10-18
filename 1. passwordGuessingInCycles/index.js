@@ -30,6 +30,33 @@ const generatePassword = (indexes) => {
 };
 
 /**
+ * Increments an array of indexes systematically for generating passwords.
+ *
+ * @param {number[]} indexes - An array of indexes.
+ * @param {number} index - The current index in the `indexes` array.
+ *
+ * @returns {[number[], number]} - A tuple containing the updated `indexes` array and the current `index`.
+ * If all combinations have been exhausted, the `index` will be negative, indicating the search is done.
+ */
+const incrementIndexes = (indexes, index) => {
+  // Loop to increment indexes systematically, starting from the last character.
+  while (index >= 0) {
+    if (indexes[index] < allowedChars.length - 1) {
+      // If the character index is not at the maximum, increment it and exit the loop.
+      indexes[index]++;
+      return [indexes, index];
+    } else {
+      // If the character index is at the maximum, reset it to 0 and move to the previous character.
+      indexes[index] = 0;
+      index--;
+    }
+  }
+
+  // If all combinations have been exhausted, return an indicator that the search is done.
+  return [indexes, index];
+};
+
+/**
  * Performs brute force password search of various lengths.
  * @param {number} endLength - Maximum password length to search for.
  * @returns {string|null} - The found password or null if the password is not found.
@@ -46,23 +73,12 @@ const brute = (endLength = 5) => {
         return password;
       }
 
-      let j = indexes.length - 1;
-      // Inner loop to increment indexes systematically, starting from the last character.
-      while (j >= 0) {
-        if (indexes[j] < allowedChars.length - 1) {
-          // If the character index is not at the maximum, increment it and exit the loop.
-          indexes[j]++;
-          break;
-        } else {
-          // If the character index is at the maximum, reset it to 0 and move to the previous character.
-          indexes[j] = 0;
-          j--;
-        }
-      }
+      let index = indexes.length - 1;
+      [indexes, index] = incrementIndexes(indexes, index);
 
-      // If 'j' becomes less than 0, it means all combinations have been exhausted for this password length.
+      // If index becomes less than 0, it means all combinations have been exhausted for this password length.
       // In this case, exit the loop to move to the next password length.
-      if (j < 0) {
+      if (index < 0) {
         break;
       }
     }
