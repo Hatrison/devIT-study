@@ -1,4 +1,4 @@
-class Queue {
+export default class Queue {
   /**
    * Creates a new instance of the Queue class.
    * @param {number} concurrency - The maximum number of concurrently executing tasks.
@@ -8,15 +8,23 @@ class Queue {
     this.running = 0;
     this.queue = [];
     this.paused = false;
+    this.stopped = false;
+    this.complete = () => console.log('All tasks are done!');
   }
+
+  processOptions = options => {
+    const { priority = 0, onResolve = () => {}, onReject = () => {} } = options;
+    return { priority, onResolve, onReject };
+  };
 
   /**
    * Adds a task to the queue with the specified priority.
    * @param {Function} task - The task function to be executed.
-   * @param {number} priority - The priority of the task (higher values indicate higher priority).
+   * @param {Object} options - Options of the task (higher values indicate higher priority).
    */
-  add = (task, priority = 0) => {
-    this.queue.push({ task, priority });
+  add = (task, options) => {
+    if (this.stopped) this.stopped = false;
+    this.queue.push({ task, ...this.processOptions(options) });
     this.queue.sort((a, b) => b.priority - a.priority);
     const isEmptyPlace = this.running < this.concurrency;
     if (isEmptyPlace) this.run();
@@ -32,12 +40,17 @@ class Queue {
 
     this.running++;
 
-    const { task } = this.queue.shift();
+    const { task, onResolve, onReject } = this.queue.shift();
 
     this.process(task)
+      .then(onResolve)
+      .catch(onReject)
       .finally(() => {
         this.running--;
         if (this.queue.length > 0) this.run();
+        if (this.queue.length === 0 && this.running === 0 && !this.stopped) {
+          this.complete();
+        }
       });
   };
 
@@ -47,11 +60,11 @@ class Queue {
    * @returns {Promise} A Promise that resolves when the task is completed successfully.
    * @throws {Error} If an error occurs during the execution of the task, it will be logged to the console.
    */
-  process = async (task) => {
+  process = async task => {
     try {
-      await task();
+      return await task();
     } catch (error) {
-      console.log(error);
+      return error;
     }
   };
 
@@ -60,6 +73,7 @@ class Queue {
    */
   stop = () => {
     this.queue = [];
+    this.stopped = true;
   };
 
   /**
@@ -82,39 +96,9 @@ class Queue {
       }
     }
   };
+
+  onComplete = callback => {
+    this.complete = callback;
+    return this;
+  };
 }
-
-// =========Tests=========
-const queue = new Queue(2);
-
-const asyncTask = (id) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      // do something
-      console.log('Async task is done:', id);
-      resolve();
-    }, 1000);
-  });
-};
-
-const syncTask = (id) => {
-  setTimeout(() => {
-    // do something
-    console.log('Sync task is done:', id);
-  }, 1000);
-};
-
-for (let i = 0; i < 10; i++) {
-  queue.add(() => asyncTask(i), i);
-}
-
-setTimeout(() => {
-  queue.stop();
-}, 3000);
-
-setTimeout(() => {
-  for (let i = 0; i < 10; i++) {
-    queue.add(() => asyncTask(i), i);
-  }
-}, 7000);
-
