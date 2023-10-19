@@ -56,7 +56,7 @@ class Queue {
   };
 
   /**
-   * Clears the queue and resets the count of running tasks (stops execution).
+   * Clears the queue.
    */
   stop = () => {
     this.queue = [];
