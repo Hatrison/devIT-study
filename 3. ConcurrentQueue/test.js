@@ -17,22 +17,22 @@ const syncTask = id => {
   return id;
 };
 
-for (let i = 0; i < 10; i++) {
+for (let i = 30; i < 50; i++) {
   queue.add(() => asyncTask(i), {
-    priority: i,
+    chance: i,
     onResolve: id => console.log('Task is done:', id),
   });
 }
 
-setTimeout(() => {
-  queue.stop();
-}, 3000);
-
-setTimeout(() => {
-  for (let i = 0; i < 10; i++) {
-    queue.add(() => asyncTask(i), {
-      priority: i,
-      onResolve: id => console.log('Task is done:', id),
-    });
-  }
-}, 7000);
+// setTimeout(() => {
+//   queue.stop();
+// }, 3000);
+//
+// setTimeout(() => {
+//   for (let i = 0; i < 10; i++) {
+//     queue.add(() => asyncTask(i), {
+//       chance: i,
+//       onResolve: id => console.log('Task is done:', id),
+//     });
+//   }
+// }, 7000);

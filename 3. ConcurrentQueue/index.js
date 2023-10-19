@@ -13,29 +13,45 @@ export default class Queue {
   }
 
   /**
-   * Processes the options for a task and returns an object containing priority, onResolve, and onReject.
+   * Processes the options for a task and returns an object containing chance, onResolve, and onReject.
    * @param {Object} options - Options for the task.
-   * @param {number} [options.priority=0] - The priority of the task (higher values indicate higher priority).
+   * @param {number} [options.chance=0] - The chance of early task execution from 0 to 100 (higher values indicate higher chance).
    * @param {Function} [options.onResolve] - A callback function to execute when the task is resolved.
    * @param {Function} [options.onReject] - A callback function to execute when the task is rejected.
-   * @returns {{ priority: number, onResolve: Function, onReject: Function }}
+   * @returns {{ chance: number, onResolve: Function, onReject: Function }}
    */
   processOptions = options => {
-    const { priority = 0, onResolve = () => {}, onReject = () => {} } = options;
-    return { priority, onResolve, onReject };
+    const { chance = 0, onResolve = () => {}, onReject = () => {} } = options;
+    return { chance, onResolve, onReject };
   };
 
   /**
-   * Adds a task to the queue with the specified priority.
+   * * Adds a task to the queue with an optional chance for early execution.
    * @param {Function} task - The task function to be executed.
    * @param {Object} [options] - Options of the task.
    */
   add = (task, options) => {
     if (this.stopped) this.stopped = false;
-    this.queue.push({ task, ...this.processOptions(options) });
-    this.queue.sort((a, b) => b.priority - a.priority);
+
+    const preparedTask = { task, ...this.processOptions(options) };
+
+    this.randomAdd(preparedTask);
+
     const isEmptyPlace = this.running < this.concurrency;
     if (isEmptyPlace) this.run();
+  };
+
+  /**
+   * Randomly adds a task to the beginning or end of the queue based on its chance.
+   * @param {Object} task - The task with its chance for early execution.
+   */
+  randomAdd = task => {
+    const randomChance = Math.random() * 100;
+    if (task.chance >= randomChance) {
+      this.queue.unshift(task);
+    } else {
+      this.queue.push(task);
+    }
   };
 
   /**
