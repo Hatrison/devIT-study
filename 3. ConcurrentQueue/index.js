@@ -35,7 +35,6 @@ class Queue {
     const { task } = this.queue.shift();
 
     this.process(task)
-      .catch(console.log)
       .finally(() => {
         this.running--;
         if (this.queue.length > 0) this.run();
@@ -43,19 +42,17 @@ class Queue {
   };
 
   /**
-   * Processes a task with a Promise, handling errors and completion.
-   * @param {Function} task - The task function to be executed with a Promise.
-   * @returns {Promise} A Promise that resolves when the task completes successfully or rejects on error.
+   * Executes a task and handles any errors that may occur during execution.
+   * @param {Function} task - The task to be executed.
+   * @returns {Promise} A Promise that resolves when the task is completed successfully.
+   * @throws {Error} If an error occurs during the execution of the task, it will be logged to the console.
    */
-  process = (task) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        await task();
-        resolve();
-      } catch (error) {
-        reject(error);
-      }
-    });
+  process = async (task) => {
+    try {
+      await task();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   /**
