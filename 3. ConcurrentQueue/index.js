@@ -34,19 +34,28 @@ class Queue {
 
     const { task } = this.queue.shift();
 
-    new Promise(async (resolve, reject) => {
+    this.process(task)
+      .catch(console.log)
+      .finally(() => {
+        this.running--;
+        if (this.queue.length > 0) this.run();
+      });
+  };
+
+  /**
+   * Processes a task with a Promise, handling errors and completion.
+   * @param {Function} task - The task function to be executed with a Promise.
+   * @returns {Promise} A Promise that resolves when the task completes successfully or rejects on error.
+   */
+  process = (task) => {
+    return new Promise(async (resolve, reject) => {
       try {
         await task();
         resolve();
       } catch (error) {
         reject(error);
       }
-    })
-      .catch(console.log)
-      .finally(() => {
-        this.running--;
-        if (this.queue.length > 0) this.run();
-      });
+    });
   };
 
   /**
