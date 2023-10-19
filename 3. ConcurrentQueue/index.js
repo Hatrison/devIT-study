@@ -60,7 +60,6 @@ class Queue {
    */
   stop = () => {
     this.queue = [];
-    this.running = 0;
   };
 
   /**
@@ -110,10 +109,12 @@ for (let i = 0; i < 10; i++) {
 }
 
 setTimeout(() => {
-  queue.pause();
+  queue.stop();
 }, 3000);
 
 setTimeout(() => {
-  queue.resume();
+  for (let i = 0; i < 10; i++) {
+    queue.add(() => asyncTask(i), i);
+  }
 }, 7000);
 
