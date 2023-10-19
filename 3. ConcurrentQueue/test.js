@@ -3,10 +3,11 @@ import Queue from './index.js';
 const queue = new Queue(2).onComplete(() => console.log('Completed!'));
 
 const asyncTask = id => {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
       // do something
       resolve(id);
+      //reject(new Error('Something went wrong!'));
     }, 1000);
   });
 };

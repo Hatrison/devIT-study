@@ -12,6 +12,14 @@ export default class Queue {
     this.complete = () => console.log('All tasks are done!');
   }
 
+  /**
+   * Processes the options for a task and returns an object containing priority, onResolve, and onReject.
+   * @param {Object} options - Options for the task.
+   * @param {number} [options.priority=0] - The priority of the task (higher values indicate higher priority).
+   * @param {Function} [options.onResolve] - A callback function to execute when the task is resolved.
+   * @param {Function} [options.onReject] - A callback function to execute when the task is rejected.
+   * @returns {{ priority: number, onResolve: Function, onReject: Function }}
+   */
   processOptions = options => {
     const { priority = 0, onResolve = () => {}, onReject = () => {} } = options;
     return { priority, onResolve, onReject };
@@ -20,7 +28,7 @@ export default class Queue {
   /**
    * Adds a task to the queue with the specified priority.
    * @param {Function} task - The task function to be executed.
-   * @param {Object} options - Options of the task (higher values indicate higher priority).
+   * @param {Object} [options] - Options of the task.
    */
   add = (task, options) => {
     if (this.stopped) this.stopped = false;
@@ -57,8 +65,7 @@ export default class Queue {
   /**
    * Executes a task and handles any errors that may occur during execution.
    * @param {Function} task - The task to be executed.
-   * @returns {Promise} A Promise that resolves when the task is completed successfully.
-   * @throws {Error} If an error occurs during the execution of the task, it will be logged to the console.
+   * @returns {Promise<any>} A Promise that resolves when the task is completed successfully or rejects with an error.
    */
   process = async task => {
     try {
@@ -69,7 +76,7 @@ export default class Queue {
   };
 
   /**
-   * Clears the queue.
+   * Clears the queue and stops further task execution.
    */
   stop = () => {
     this.queue = [];
@@ -97,6 +104,11 @@ export default class Queue {
     }
   };
 
+  /**
+   * Sets a callback function to be executed when all tasks are completed.
+   * @param {Function} callback - The callback function to execute when all tasks are done.
+   * @returns {Queue} The Queue instance for method chaining.
+   */
   onComplete = callback => {
     this.complete = callback;
     return this;
