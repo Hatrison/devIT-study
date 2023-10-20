@@ -17,9 +17,9 @@ const syncTask = id => {
   return id;
 };
 
-for (let i = 30; i < 50; i++) {
+for (let i = 20; i < 70; i = i + 3) {
   queue.add(() => asyncTask(i), {
-    chance: i,
+    priority: i,
     onResolve: id => console.log('Task is done:', id),
   });
 }
@@ -31,7 +31,7 @@ for (let i = 30; i < 50; i++) {
 // setTimeout(() => {
 //   for (let i = 0; i < 10; i++) {
 //     queue.add(() => asyncTask(i), {
-//       chance: i,
+//       priority: i,
 //       onResolve: id => console.log('Task is done:', id),
 //     });
 //   }

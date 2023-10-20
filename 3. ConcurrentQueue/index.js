@@ -13,20 +13,20 @@ export default class Queue {
   }
 
   /**
-   * Processes the options for a task and returns an object containing chance, onResolve, and onReject.
+   * Processes the options for a task and returns an object containing priority, onResolve, and onReject.
    * @param {Object} options - Options for the task.
-   * @param {number} [options.chance=0] - The chance of early task execution from 0 to 100 (higher values indicate higher chance).
+   * @param {number} [options.priority=0] - The priority of early task execution from 0 to 100 (higher values indicate higher priority).
    * @param {Function} [options.onResolve] - A callback function to execute when the task is resolved.
    * @param {Function} [options.onReject] - A callback function to execute when the task is rejected.
-   * @returns {{ chance: number, onResolve: Function, onReject: Function }}
+   * @returns {{ priority: number, onResolve: Function, onReject: Function }}
    */
   processOptions = options => {
-    const { chance = 0, onResolve = () => {}, onReject = () => {} } = options;
-    return { chance, onResolve, onReject };
+    const { priority = 0, onResolve = () => {}, onReject = () => {} } = options;
+    return { priority, onResolve, onReject };
   };
 
   /**
-   * * Adds a task to the queue with an optional chance for early execution.
+   * * Adds a task to the queue with options.
    * @param {Function} task - The task function to be executed.
    * @param {Object} [options] - Options of the task.
    */
@@ -35,22 +35,27 @@ export default class Queue {
 
     const preparedTask = { task, ...this.processOptions(options) };
 
-    this.randomAdd(preparedTask);
+    this.queue.push(preparedTask);
 
     const isEmptyPlace = this.running < this.concurrency;
     if (isEmptyPlace) this.run();
   };
 
   /**
-   * Randomly adds a task to the beginning or end of the queue based on its chance.
-   * @param {Object} task - The task with its chance for early execution.
+   * Removes and returns a task from the queue based on random priority selection.
+   * @returns {Object} The selected task with a priority greater than or equal to a randomly generated priority value
+   *                   or the first element in the queue.
    */
-  randomAdd = task => {
-    const randomChance = Math.random() * 100;
-    if (task.chance >= randomChance) {
-      this.queue.unshift(task);
+  randomShift = () => {
+    const randomPriority = Math.random() * 100;
+    const result = this.queue.find(task => task.priority >= randomPriority);
+
+    if (result) {
+      const index = this.queue.indexOf(result);
+      this.queue.splice(index, 1);
+      return result;
     } else {
-      this.queue.push(task);
+      return this.queue.shift();
     }
   };
 
@@ -64,7 +69,7 @@ export default class Queue {
 
     this.running++;
 
-    const { task, onResolve, onReject } = this.queue.shift();
+    const { task, onResolve, onReject } = this.randomShift();
 
     this.process(task)
       .then(onResolve)
