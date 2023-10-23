@@ -95,6 +95,22 @@ class BruteForce extends Queue {
   }
 
   /**
+   * Calculate the priority of a password based on the number of known characters it contains.
+   * @param {string} password - The password for which to calculate the priority.
+   * @param {string[]} knownChars - An array of known characters to compare with the password.
+   * @returns {number} The calculated priority as a percentage, based on the number of known characters.
+   */
+  calculatePriority = (password, knownChars) => {
+    // Calculate the number of known characters in the password.
+    const charCount = knownChars.reduce((acc, char) => {
+      if (password.includes(char)) return acc + 1;
+      return acc;
+    }, 0);
+    // Calculate the priority based on the number of known characters.
+    return (charCount / password.length) * 100;
+  };
+
+  /**
    * Brute force password searching.
    * @param {number} [endLength=1] - Maximum password length to search for.
    * @param {string[]} [knownChars=[]] - An array of characters that are known to be in the password.
@@ -118,19 +134,15 @@ class BruteForce extends Queue {
         indexGenerator = this.incrementIndexes(indexes);
       }
 
-      // Calculate the number of known characters in the password.
-      const charCount = knownChars.reduce((acc, char) => {
-        if (password.includes(char)) return acc + 1;
-        return acc;
-      }, 0);
-      // Calculate the priority based on the number of known characters.
-      const priority = (charCount / password.length) * 100;
+      const priority = this.calculatePriority(password, knownChars);
 
       this.add(() => this.login(password), {
         priority,
         onResolve: ({ success, password }) => {
           if (success) {
-            console.log(`Password found: ${password}`);
+            console.log(
+              `Password found: ${password} with priority ${priority}`
+            );
             this.stop();
           }
         },
@@ -140,4 +152,4 @@ class BruteForce extends Queue {
 }
 
 const bruteForce = new BruteForce();
-bruteForce.brute(givenPassword.length, ['q', 'T', 'u', 'I', 'p']);
+bruteForce.brute(givenPassword.length, ['q', 'T', 'u', 'I']);
