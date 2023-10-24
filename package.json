@@ -10,7 +10,10 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
-    "prettier": "3.0.3"
+    "@types/node": "^20.8.8",
+    "prettier": "3.0.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
   },
   "prettier": {
     "printWidth": 80,
