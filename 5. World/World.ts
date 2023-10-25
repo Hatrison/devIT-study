@@ -1,9 +1,38 @@
 import { Human, Man, Woman } from './Human.ts';
 import { professions } from './constants.ts';
+import {
+  GlacialPeriod,
+  HeatWave,
+  NuclearWinter,
+} from './cataclysms/WeatherCataclysms.ts';
+import {
+  AlienInvasion,
+  Earthquake,
+  Fire,
+  Flood,
+  Meteorite,
+  Tornado,
+  Tsunami,
+} from './cataclysms/Disasters.ts';
+import { Epidemic, Plague } from './cataclysms/Illnesses.ts';
 import { Cataclysm } from './cataclysms/Cataclysm.ts';
-import { WeatherCataclysm } from './cataclysms/WeatherCataclysms.ts';
-import { Disaster } from './cataclysms/Disasters.ts';
-import { Illness } from './cataclysms/Illnesses.ts';
+
+type TCataclysm = { name: typeof Cataclysm; possibility: number };
+
+const cataclysms: TCataclysm[] = [
+  { name: NuclearWinter, possibility: 0.00001 },
+  { name: HeatWave, possibility: 0.1 },
+  { name: GlacialPeriod, possibility: 0.00001 },
+  { name: Earthquake, possibility: 0.1 },
+  { name: Flood, possibility: 0.1 },
+  { name: Tornado, possibility: 0.1 },
+  { name: Meteorite, possibility: 0.00001 },
+  { name: AlienInvasion, possibility: 0.000001 },
+  { name: Tsunami, possibility: 0.01 },
+  { name: Fire, possibility: 0.1 },
+  { name: Plague, possibility: 0.0001 },
+  { name: Epidemic, possibility: 0.0001 },
+];
 
 export class World {
   constructor(
@@ -55,8 +84,9 @@ export class World {
 
       this.year++;
 
-      if (this.year === 10) {
-        const dead = Illness.create(this);
+      const cataclysm: TCataclysm | null = this.getRandomCataclysm();
+      if (cataclysm) {
+        const dead = cataclysm.name.create(this);
         this.stats.died = this.stats.died + dead;
       }
 
@@ -179,13 +209,32 @@ export class World {
     );
   }
 
+  private getRandomCataclysm(): TCataclysm | null {
+    const randomValue: number = Math.random();
+
+    const eligibleCataclysms: TCataclysm[] = cataclysms.filter(
+      ({ possibility }) => possibility >= randomValue
+    );
+
+    if (eligibleCataclysms.length === 0) {
+      return null;
+    }
+
+    return eligibleCataclysms[
+      Math.floor(Math.random() * eligibleCataclysms.length)
+    ];
+  }
+
   private deathDueToTemperature(): void {
     const probability: number = Math.random();
 
     const willDieDueToTemperature: boolean =
+      (probability <= 0.2 && this.temperature <= 60) ||
+      (probability <= 0.05 && this.temperature <= 40) ||
       (probability <= 0.05 && this.temperature <= 0) ||
       (probability <= 0.1 && this.temperature <= -10) ||
-      (probability <= 0.3 && this.temperature <= -30);
+      (probability <= 0.3 && this.temperature <= -30) ||
+      (probability <= 0.5 && this.temperature <= -50);
 
     if (willDieDueToTemperature) {
       const index: number = Math.floor(Math.random() * this.people.length);
