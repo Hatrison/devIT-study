@@ -1,10 +1,9 @@
-import Human from './Human.ts';
-import World from './World.ts';
+import { Man, Woman } from './Human.ts';
+import { World } from './World.ts';
 
-const male = new Human(
+const male = new Man(
   'Ilya',
   'Peikert',
-  'male',
   19,
   'brown',
   'brunette',
@@ -17,13 +16,12 @@ const male = new Human(
   null,
   [],
   [],
-  'hunter'
+  'leader'
 );
 
-const female = new Human(
+const female = new Woman(
   'Katya',
   'Boyko',
-  'female',
   18,
   'blue',
   'fair',
@@ -39,10 +37,9 @@ const female = new Human(
   'washing machine'
 );
 
-const Vadik = new Human(
+const Vadik = new Man(
   'Vadik',
   'Ulanovskiy',
-  'male',
   20,
   'brown',
   'fair',
@@ -55,13 +52,12 @@ const Vadik = new Human(
   null,
   [],
   [],
-  'farmer'
+  'oracle'
 );
 
-const Masha = new Human(
+const Masha = new Woman(
   'Masha',
   'Kochanova',
-  'female',
   19,
   'brown',
   'fair',
@@ -77,10 +73,9 @@ const Masha = new Human(
   'cooker'
 );
 
-const Vovik = new Human(
+const Vovik = new Man(
   'Vovik',
   'Zherlitsin',
-  'male',
   19,
   'green',
   'fair',
@@ -93,7 +88,7 @@ const Vovik = new Human(
   null,
   [],
   [],
-  'miner'
+  'shaman'
 );
 
 const world = new World([male, female, Vadik, Masha, Vovik]);
