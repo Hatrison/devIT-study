@@ -1,15 +1,19 @@
 import { Human, Man, Woman } from './Human.ts';
 import { professions } from './constants.ts';
-import { Cataclysm } from './Cataclysm.ts';
+import { Cataclysm } from './cataclysms/Cataclysm.ts';
+import { WeatherCataclysm } from './cataclysms/WeatherCataclysms.ts';
+import { Disaster } from './cataclysms/Disasters.ts';
+import { Illness } from './cataclysms/Illnesses.ts';
 
 export class World {
   constructor(
     public people: (Man | Woman)[] = [],
     public year: number = 0,
-    private tick: number = 1000
+    public temperature: number = 20,
+    public tick: number = 1000
   ) {}
 
-  private stats: { died: number; born: number; year?: number } = {
+  public stats: { died: number; born: number; year?: number } = {
     died: 0,
     born: 0,
   };
@@ -22,6 +26,10 @@ export class World {
 
         if (human.age === 18) {
           human.profession = this.generateProfession();
+        }
+
+        if (this.temperature < 0) {
+          this.deathDueToTemperature();
         }
 
         if (!human.isAlive()) {
@@ -48,11 +56,8 @@ export class World {
       this.year++;
 
       if (this.year === 10) {
-        const dead = Cataclysm.create(this);
+        const dead = Illness.create(this);
         this.stats.died = this.stats.died + dead;
-        console.log(
-          `Cataclysm killed ${dead} people! Still alive ${this.people.length}`
-        );
       }
 
       this.stats = {
@@ -172,5 +177,20 @@ export class World {
           !busyProfessions?.includes(profession.toLowerCase())
       )
     );
+  }
+
+  private deathDueToTemperature(): void {
+    const probability: number = Math.random();
+
+    const willDieDueToTemperature: boolean =
+      (probability <= 0.05 && this.temperature <= 0) ||
+      (probability <= 0.1 && this.temperature <= -10) ||
+      (probability <= 0.3 && this.temperature <= -30);
+
+    if (willDieDueToTemperature) {
+      const index: number = Math.floor(Math.random() * this.people.length);
+      this.people.splice(index, 1);
+      this.stats.died++;
+    }
   }
 }

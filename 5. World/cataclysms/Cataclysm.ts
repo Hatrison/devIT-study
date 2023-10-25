@@ -1,5 +1,11 @@
-import { Man, Woman } from './Human.ts';
-import { World } from './World.ts';
+import { Man, Woman } from '../Human.ts';
+import { World } from '../World.ts';
+
+export type TStats = {
+  total: number;
+  alive: number;
+  dead: number;
+};
 
 export class Cataclysm {
   constructor(private maxDamage: number) {}
@@ -8,15 +14,22 @@ export class Cataclysm {
     return new Cataclysm(maxDamage).start(world);
   }
 
-  private start(world: World): number {
-    const { dead } = this.reducePopulation(world.people);
-    return dead;
+  protected start(world: World): number {
+    const stats: TStats = this.reducePopulation(world.people);
+    this.log(stats);
+    return stats.dead;
   }
 
-  private reducePopulation(people: (Man | Woman)[]): {
-    alive: number;
-    dead: number;
-  } {
+  protected log({ total, dead, alive }: TStats): void {
+    console.log(
+      `${this.constructor.name} happened! 
+      Total population: ${total}; 
+      ${this.constructor.name} killed ${dead} people! 
+      Still alive ${alive}!`
+    );
+  }
+
+  protected reducePopulation(people: (Man | Woman)[]): TStats {
     const totalPopulation: number = people.length;
     const peopleToKill: number = Math.min(
       totalPopulation,
@@ -28,13 +41,10 @@ export class Cataclysm {
       Math.floor(Math.random() * (totalPopulation - peopleToKill))
     );
 
-    console.log(
-      `Total population: ${totalPopulation} Cataclysm killed ${peopleToKill} people! Index: ${index}`
-    );
-
     const dead = people.splice(index, peopleToKill);
 
     return {
+      total: totalPopulation,
       alive: totalPopulation - dead.length,
       dead: dead.length,
     };
