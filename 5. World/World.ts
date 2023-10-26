@@ -35,6 +35,14 @@ const cataclysms: TCataclysm[] = [
 ];
 
 export class World {
+  /**
+   * Create a World.
+   * @constructor
+   * @param {(Man | Woman)[]} people - The array of people in the world.
+   * @param {number} year - The current year in the world.
+   * @param {number} temperature - The current temperature in the world.
+   * @param {number} tick - The time interval for world events.
+   */
   constructor(
     public people: (Man | Woman)[] = [],
     public year: number = 0,
@@ -42,11 +50,18 @@ export class World {
     public tick: number = 1000
   ) {}
 
+  /**
+   * The statistics of the world, including births, deaths, and the current year.
+   * @property
+   */
   public stats: { died: number; born: number; year?: number } = {
     died: 0,
     born: 0,
   };
 
+  /**
+   * Simulates life in the world, advancing time and handling various events.
+   */
   public life(): void {
     setInterval((): void => {
       this.people.forEach((human: Man | Woman): void => {
@@ -112,6 +127,12 @@ export class World {
     }, this.tick);
   }
 
+  /**
+   * Finds a suitable partner for a human, based on age and gender.
+   * @private
+   * @param {Man | Woman} human - The human looking for a partner.
+   * @returns {Man | Woman | null} - A suitable partner or null if none is found.
+   */
   private findPartner(human: Man | Woman): Man | Woman | null {
     return (
       this.people.find(
@@ -123,6 +144,12 @@ export class World {
     );
   }
 
+  /**
+   * Simulates the birth of one or more children by a woman.
+   * @private
+   * @param {Woman} human - The woman giving birth.
+   * @param {number} quantity - The number of children to be born.
+   */
   private born(human: Woman, quantity: number) {
     return setTimeout((): void => {
       for (let i = 1; i <= quantity; i++) {
@@ -138,6 +165,13 @@ export class World {
     }, this.tick);
   }
 
+  /**
+   * Determines if a woman will give birth based on probability and the number of existing children.
+   * @private
+   * @param {number} probability - The probability of giving birth.
+   * @param {number} childrenQuantity - The number of existing children.
+   * @returns {boolean} - True if the woman will give birth, false if not.
+   */
   private willBorn(probability: number, childrenQuantity: number): boolean {
     return (
       (probability <= 0.85 && childrenQuantity === 0) ||
@@ -147,6 +181,11 @@ export class World {
     );
   }
 
+  /**
+   * Attempts to give birth to children by a woman based on probability.
+   * @private
+   * @param {Woman} human - The woman trying to give birth.
+   */
   private tryToBorn(human: Woman): void {
     const childrenQuantity: number = human.children.length;
     const probability: number = Math.random();
@@ -164,6 +203,11 @@ export class World {
     }
   }
 
+  /**
+   * Calculates statistics about the people in the world, including the count of males, females, and children.
+   * @private
+   * @returns {Object} - Object containing calculated statistics.
+   */
   private calculatePeople(): Object {
     const children: number = this.people.filter(
       (human: Human): boolean => human.age < 18
@@ -178,6 +222,12 @@ export class World {
     return { males, females, children };
   }
 
+  /**
+   * Checks if a woman is eligible to give birth based on age and other conditions.
+   * @private
+   * @param {Woman} female - The woman to check for eligibility.
+   * @returns {boolean} - True if the woman is eligible to give birth, false otherwise.
+   */
   private femaleCanBorn(female: Woman): boolean {
     return (
       (female.canBorn &&
@@ -189,10 +239,21 @@ export class World {
     );
   }
 
+  /**
+   * Chooses a random profession from the available professions.
+   * @private
+   * @param {string[]} array - The array of available professions.
+   * @returns {string} - The randomly selected profession.
+   */
   private chooseRandomProfession(array: string[]): string {
     return array[Math.floor(Math.random() * array.length)];
   }
 
+  /**
+   * Generates a random profession for an 18-year-old human.
+   * @private
+   * @returns {string} - The generated profession.
+   */
   private generateProfession(): string {
     const uniqueProfessions: string[] = ['leader', 'oracle', 'shaman'];
     const busyProfessions: string[] | undefined = this.people
@@ -209,6 +270,11 @@ export class World {
     );
   }
 
+  /**
+   * Selects a random cataclysm event based on probabilities.
+   * @private
+   * @returns {TCataclysm | null} - The selected cataclysm event or null if none are selected.
+   */
   private getRandomCataclysm(): TCataclysm | null {
     const randomValue: number = Math.random();
 
@@ -225,6 +291,10 @@ export class World {
     ];
   }
 
+  /**
+   * Simulates human deaths due to extreme temperatures.
+   * @private
+   */
   private deathDueToTemperature(): void {
     const probability: number = Math.random();
 
