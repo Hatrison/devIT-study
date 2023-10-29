@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/modern-normalize@2.0.0/modern-normalize.min.css'>
+  <link rel='stylesheet' type='text/css' href='css/index.css'>
+  <title>Blackjack</title>
+</head>
+<body>
+<main id='container' class='main-content'>
+  <div id='header'>
+    <h1 class='title'>BlackJack</h1>
+  </div>
+  <div class='game'>
+    <div id='content' class='playground'>
+      <div id='player' class='card-table'>
+        <div class='info'>
+          <h2>Player</h2>
+          <div id='player-points' class='points'>0</div>
+        </div>
+        <ul id='player-cards' class='cards'></ul>
+      </div>
+      <div id='dealer' class='card-table'>
+        <div class='info'>
+          <h2>Dealer</h2>
+          <div id='dealer-points' class='points'>0</div>
+        </div>
+        <ul id='dealer-cards' class='cards'></ul>
+      </div>
+    </div>
+    <ul id='buttons' class='buttons-list'>
+      <li>
+        <button id='hit' class='button'>Hit</button>
+      </li>
+      <li>
+        <button id='stand' class='button'>Stand</button>
+      </li>
+      <li>
+        <button id='check' class='button'>Check</button>
+      </li>
+    </ul>
+  </div>
+  <div id='modal' class='backdrop hidden'>
+    <div class='modal'>
+      <div class='modal-header'>
+        <h2 class='modal-title'>Game Over</h2>
+      </div>
+      <div class='modal-body'>
+        <p id='modal-message' class='modal-message'></p>
+      </div>
+      <div class='modal-footer'>
+        <button id='modal-button' class='button'>Restart</button>
+      </div>
+    </div>
+  </div>
+</main>
+<script type='module' src='js/index.js'></script>
+</body>
+</html>

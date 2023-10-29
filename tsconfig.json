@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "rootDir": "./src/",
-    "outDir": "./dist/",
+    "strict": true,
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowImportingTsExtensions": true,
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -14,7 +15,15 @@
     "target": "es6",
     "module": "esnext"
   },
+  "include": [
+    "**/*.ts"
+  ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true,
+    "esm": true
+  }
 }
