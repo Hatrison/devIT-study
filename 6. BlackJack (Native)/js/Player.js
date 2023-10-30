@@ -1,8 +1,11 @@
 export class Player {
-  constructor() {
+  static #counter = 0;
+
+  constructor(game) {
+    this.game = game;
     this.hand = [];
-    this.scoreboard = document.getElementById('player-points');
-    this.cards = document.getElementById('player-cards');
+    Player.#counter++;
+    this.id = Player.#counter;
   }
 
   score() {
@@ -12,7 +15,25 @@ export class Player {
   render() {
     const cards = this.hand.map(card => card.render());
     const score = this.score();
-    this.scoreboard.innerHTML = String(score);
-    this.cards.innerHTML = cards.join('');
+
+    return `<div class='player'>
+              <div id='player' class='card-table'>
+                <div class='info'>
+                  <h2>Player ${this.id}</h2>
+                  <div id='player-points' class='points'>${String(score)}</div>
+                </div>
+                <ul id='player-cards' class='cards'>${cards.join('')}</ul>
+              </div>
+              <ul id='buttons' class='buttons-list'>
+                <li>
+                  <button id='hit' class='button' disabled
+                  data-player='${this.id}'>Hit</button>
+                </li>
+                <li>
+                  <button id='stand' class='button' disabled 
+                  data-player='${this.id}'>Stand</button>
+                </li>
+              </ul>
+            </div>`;
   }
 }

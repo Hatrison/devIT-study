@@ -52,6 +52,7 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    padding: 20px;
 }
 
 .title {
@@ -64,7 +65,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: calc(100vh - 40px);
 }
 
 .game {
@@ -78,10 +79,17 @@ body {
 
 .playground {
     display: flex;
+    flex-wrap: wrap;
     gap: 40px;
     align-items: stretch;
     justify-content: center;
     width: 100%;
+}
+
+.player {
+    gap: 20px;
+    display: grid;
+    grid-template-rows: 1fr auto;
 }
 
 .card-table {
@@ -92,7 +100,8 @@ body {
     flex-wrap: wrap;
     padding: 20px;
     background-color: rgba(0, 0, 0, 0.1);
-    width: 500px;
+    flex-basis: calc((100% - 40px - 60px) / 3);
+    max-width: 260px;
     border-radius: 10px;
 }
 
@@ -171,6 +180,11 @@ body {
 .button:focus {
     outline: none;
     background-color: #8F8D8D;
+}
+
+.button:disabled {
+    background-color: #8F8D8D;
+    cursor: not-allowed;
 }
 
 .backdrop {

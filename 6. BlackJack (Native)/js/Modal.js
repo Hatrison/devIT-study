@@ -1,3 +1,5 @@
+import { Deck } from './Deck.js';
+
 export class Modal {
   constructor(game) {
     this.game = game;
@@ -15,6 +17,7 @@ export class Modal {
 
   restart() {
     this.modal.classList.add('hidden');
+    this.game.deck = new Deck();
     this.game.start();
   }
 }
