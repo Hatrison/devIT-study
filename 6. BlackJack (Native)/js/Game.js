@@ -14,6 +14,9 @@ export class Game {
     this.playground.addEventListener('click', this.onClickPlayground);
   }
 
+  /**
+   * Start the game by shuffling the deck, dealing cards to players and the dealer.
+   */
   start() {
     this.deck.shuffle();
     this.players.forEach(player => (player.hand = this.deck.deal(2)));
@@ -27,6 +30,11 @@ export class Game {
     this.allowButtons(0);
   }
 
+  /**
+   * Enable or disable hit and stand buttons for a specific player.
+   * @param {number} index - The index of the player.
+   * @param {boolean} [status=true] - Whether to enable (true) or disable (false) the buttons.
+   */
   allowButtons(index, status = true) {
     const hitButtons = document.querySelectorAll('#hit');
     const standButtons = document.querySelectorAll('#stand');
@@ -35,6 +43,10 @@ export class Game {
     standButtons[index].disabled = !status;
   }
 
+  /**
+   * Event handler for clicks on the game playground.
+   * @param {MouseEvent} event - The click event.
+   */
   onClickPlayground = event => {
     if (event.target.id === 'hit') {
       this.hit(event.target.dataset.player);
@@ -43,6 +55,10 @@ export class Game {
     }
   };
 
+  /**
+   * Handle the "hit" action for a player by dealing a card to them.
+   * @param {string} playerId - The ID of the player to hit.
+   */
   hit(playerId) {
     const player = this.players.find(player => player.id === Number(playerId));
     player.hand = player.hand.concat(this.deck.deal(1));
@@ -55,6 +71,10 @@ export class Game {
     this.allowButtons(playerId - 1);
   }
 
+  /**
+   * Handle the "stand" action for a player by disabling their buttons.
+   * @param {string} playerId - The ID of the player who stands.
+   */
   stand(playerId) {
     this.allowButtons(playerId - 1, false);
 
@@ -65,6 +85,9 @@ export class Game {
     }
   }
 
+  /**
+   * Check the game's result and determine the winner.
+   */
   check() {
     const dealerScore = this.dealer.score();
     const playerScores = this.players.map(player => player.score());

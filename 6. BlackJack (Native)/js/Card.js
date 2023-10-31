@@ -5,6 +5,10 @@ export class Card {
     this.value = rank.value;
   }
 
+  /**
+   * Render the card as an HTML representation.
+   * @returns {string} HTML representation of the card.
+   */
   render() {
     return `<li class='card 
               ${this.suit === '♥' || this.suit === '♦' ? 'red' : 'black'}'>

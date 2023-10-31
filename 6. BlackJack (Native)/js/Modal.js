@@ -10,11 +10,18 @@ export class Modal {
     this.restartButton.addEventListener('click', this.restart.bind(this));
   }
 
+  /**
+   * Open the modal and display a message.
+   * @param {string} message - The message to be displayed in the modal.
+   */
   open(message) {
     this.modalMessage.innerHTML = message;
     this.modal.classList.remove('hidden');
   }
 
+  /**
+   * Restart the game by closing the modal and initializing a new deck.
+   */
   restart() {
     this.modal.classList.add('hidden');
     this.game.deck = new Deck();

@@ -19,6 +19,8 @@ export class Deck {
       { name: 'K', value: 10 },
       { name: 'A', value: 11 },
     ];
+
+    // Initialize the deck by creating cards with all possible combinations of suits and ranks.
     this.ranks.forEach(rank => {
       this.suits.forEach(suit => {
         this.cards.push(new Card(rank, suit));
@@ -26,6 +28,9 @@ export class Deck {
     });
   }
 
+  /**
+   * Shuffle the order of cards in the deck.
+   */
   shuffle() {
     let currentIndex = this.cards.length;
     let temporaryValue;
@@ -41,6 +46,11 @@ export class Deck {
     }
   }
 
+  /**
+   * Deal a specified number of cards from the deck.
+   * @param {number} num - The number of cards to deal.
+   * @returns {Card[]} An array of dealt cards.
+   */
   deal(num) {
     return this.cards.splice(0, num);
   }

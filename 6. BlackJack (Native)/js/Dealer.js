@@ -7,6 +7,9 @@ export class Dealer extends Player {
     this.cards = document.getElementById('dealer-cards');
   }
 
+  /**
+   * Render the dealer's current state, updating the displayed score and cards.
+   */
   render() {
     this.scoreboard.innerHTML = String(this.score());
     this.cards.innerHTML = this.hand.map(card => card.render()).join('');
