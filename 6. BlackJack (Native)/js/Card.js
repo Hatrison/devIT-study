@@ -7,9 +7,12 @@ export class Card {
 
   render() {
     return `<li class='card 
-            ${this.suit === '♥' || this.suit === '♦' ? 'red' : 'black'}'>
-            <div class='rank'>${this.rank}</div>
-            <div class='suit'>${this.suit}</div>
-          </li>`;
+              ${this.suit === '♥' || this.suit === '♦' ? 'red' : 'black'}'>
+              <div class='card-front'>
+                <div class='rank'>${this.rank}</div>
+                <div class='suit'>${this.suit}</div>
+              </div>
+              <div class='card-back'></div>
+            </li>`;
   }
 }

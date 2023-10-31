@@ -6,12 +6,7 @@ import { Modal } from './Modal.js';
 export class Game {
   constructor() {
     this.deck = new Deck();
-    this.players = [
-      new Player(this),
-      new Player(this),
-      new Player(this),
-      new Player(this),
-    ];
+    this.players = [new Player(), new Player(), new Player(), new Player()];
     this.dealer = new Dealer();
     this.modal = new Modal(this);
     this.playground = document.getElementById('playground');
@@ -73,28 +68,26 @@ export class Game {
   check() {
     const dealerScore = this.dealer.score();
     const playerScores = this.players.map(player => player.score());
+    const winningScores = playerScores.filter(score => score <= 21);
+    const blackjackScores = playerScores.filter(score => score === 21);
 
-    if (playerScores.every(score => score > 21)) {
-      this.modal.open('Dealer won!'); // Если все игроки перебрали (сумма очков более 21)
-    } else if (playerScores.some(score => score === 21)) {
-      const winners = this.players.filter(player => player.score() === 21);
-      if (winners.length === 1) {
-        this.modal.open(`Player ${winners[0].id} won!`); // Если есть один победитель с наивысшими очками
-      } else {
-        const winnerNames = winners.map(player => `Player ${player.id}`);
-        this.modal.open(`${winnerNames.join(', ')} won!`); // Если есть несколько победителей с одинаковыми наивысшими очками
-      }
+    if (
+      !winningScores.length ||
+      winningScores.every(score => score < dealerScore)
+    ) {
+      this.modal.open('Dealer won!');
+    } else if (blackjackScores.length && dealerScore === 21) {
+      this.modal.open('Draw!');
     } else {
-      const filteredScores = playerScores.filter(score => score <= 21);
-      const greatestScore = Math.max(...filteredScores);
+      const greatestScore = Math.max(...winningScores);
       const winners = this.players.filter(
         player => player.score() === greatestScore
       );
+
       if (winners.length === 1) {
-        this.modal.open(`Player ${winners[0].id} won!`); // Если есть один победитель с наивысшими очками
+        this.modal.open(`Player ${winners[0].id} won!`);
       } else {
-        const winnerNames = winners.map(player => `Player ${player.id}`);
-        this.modal.open(`${winnerNames.join(', ')} won!`); // Если есть несколько победителей с одинаковыми наивысшими очками
+        this.modal.open(`Draw!`);
       }
     }
   }

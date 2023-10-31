@@ -1,15 +1,22 @@
 export class Player {
   static #counter = 0;
 
-  constructor(game) {
-    this.game = game;
+  constructor() {
     this.hand = [];
     Player.#counter++;
     this.id = Player.#counter;
   }
 
   score() {
-    return this.hand.reduce((acc, card) => acc + card.value, 0);
+    let total = this.hand.reduce((acc, card) => acc + card.value, 0);
+    let numAces = this.hand.filter(card => card.rank === 'A').length;
+
+    while (numAces > 0 && total > 21) {
+      total -= 10;
+      numAces--;
+    }
+
+    return total;
   }
 
   render() {
