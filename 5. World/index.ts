@@ -1,7 +1,8 @@
-import { Man, Woman } from './Human.ts';
+import { Man } from './humans/Man.ts';
+import { Woman } from './humans/Woman.ts';
 import { World } from './World.ts';
 
-const male = new Man(
+const Ilya = new Man(
   'Ilya',
   'Peikert',
   19,
@@ -19,7 +20,7 @@ const male = new Man(
   'leader'
 );
 
-const female = new Woman(
+const Katya = new Woman(
   'Katya',
   'Boyko',
   18,
@@ -91,5 +92,5 @@ const Vovik = new Man(
   'shaman'
 );
 
-const world = new World([male, female, Vadik, Masha, Vovik]);
+const world = new World([Ilya, Katya, Vadik, Masha, Vovik]);
 world.life();

@@ -1,4 +1,5 @@
-import { Man, Woman } from '../Human.ts';
+import { Man } from '../humans/Man.ts';
+import { Woman } from '../humans/Woman.ts';
 import { World } from '../World.ts';
 
 export type TStats = {
