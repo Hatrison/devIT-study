@@ -1,4 +1,4 @@
-export const girlsNames: string[] = [
+export const GIRLS_NAMES: string[] = [
   'Maria',
   'Olga',
   'Natalia',
@@ -17,7 +17,7 @@ export const girlsNames: string[] = [
   'Ksenia',
 ];
 
-export const boysNames: string[] = [
+export const BOYS_NAMES: string[] = [
   'Ivan',
   'Alexander',
   'Sergei',
@@ -36,7 +36,7 @@ export const boysNames: string[] = [
   'Denis',
 ];
 
-export const professions: string[] = [
+export const PROFESSIONS: string[] = [
   'Hunter',
   'Gatherer',
   'Fisherman',

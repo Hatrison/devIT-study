@@ -1,4 +1,4 @@
-import { boysNames, girlsNames } from './constants.ts';
+import { BOYS_NAMES, GIRLS_NAMES } from './constants.ts';
 
 export class Human {
   /**
@@ -175,8 +175,8 @@ export class Woman extends Human {
     const gender = this.randomGender();
     const name =
       gender === 'male'
-        ? this.chooseRandomName(boysNames)
-        : this.chooseRandomName(girlsNames);
+        ? this.chooseRandomName(BOYS_NAMES)
+        : this.chooseRandomName(GIRLS_NAMES);
     const characteristics: (string | number)[] = [
       name,
       this.surname,

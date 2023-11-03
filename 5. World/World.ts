@@ -1,5 +1,5 @@
 import { Human, Man, Woman } from './Human.ts';
-import { professions } from './constants.ts';
+import { PROFESSIONS } from './constants.ts';
 import {
   GlacialPeriod,
   HeatWave,
@@ -263,7 +263,7 @@ export class World {
       .map((human: Human) => human.profession as string);
 
     return this.chooseRandomProfession(
-      professions.filter(
+      PROFESSIONS.filter(
         (profession: string) =>
           !busyProfessions?.includes(profession.toLowerCase())
       )
