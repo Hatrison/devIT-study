@@ -1,18 +1,26 @@
 import { Invader } from './Invader.js';
 
 export class Bunch {
-  constructor(game, rows = 3, columns = 10) {
+  constructor(
+    game,
+    rows = 3,
+    columns = 10,
+    canShoot = true,
+    maxHp = 2,
+    velocity = 3
+  ) {
     this.game = game;
     this.posX = 0;
     this.posY = 0;
     this.velocity = {
-      x: 3,
+      x: velocity,
       y: 0,
     };
 
     this.invaders = [];
 
-    this.canShoot = true;
+    this.canShoot = canShoot;
+    this.maxHp = maxHp;
 
     this.createBunch(rows, columns);
   }
@@ -33,6 +41,7 @@ export class Bunch {
             posX: x * (invaderWidth + invaderGap),
             posY: y * (invaderHeight + invaderGap),
             velocity: this.velocity.x,
+            maxHp: this.maxHp,
           })
         );
       }
@@ -41,8 +50,7 @@ export class Bunch {
 
   update() {
     if (this.invaders.length === 0) {
-      this.game.bunch = null;
-      this.game.win();
+      this.game.nextLevel();
       return;
     }
 

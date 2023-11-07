@@ -16,16 +16,20 @@ export class Game {
     this.levelEl = document.getElementById('level-num');
 
     this.player = new Player(this);
-    this.bunch = new Bunch(this);
-    this.barricades = Barricade.createBarricades(this, 4);
-    this.bullets = [];
-    this.enemyBullets = [];
+    this.init(3, 10, false, 1, 2);
     this.level = 1;
     this.score = 0;
     this.lives = 2;
     this.levelEl.innerHTML = this.level;
     this.scoreEl.innerHTML = this.score;
     this.livesEl.innerHTML = this.lives;
+  }
+
+  init(rows, columns, canShoot, maxHp, velocity) {
+    this.bunch = new Bunch(this, rows, columns, canShoot, maxHp, velocity);
+    this.bullets = [];
+    this.enemyBullets = [];
+    this.barricades = Barricade.createBarricades(this, 4);
   }
 
   start() {
@@ -50,6 +54,17 @@ export class Game {
     this.enemyBullets.forEach(bullet => {
       bullet.update();
     });
+  }
+
+  nextLevel() {
+    this.level++;
+    this.levelEl.innerHTML = this.level;
+
+    if (this.level === 2) this.init(4, 10, false, 1, 3);
+    if (this.level === 3) this.init(2, 10, true, 1, 2);
+    if (this.level === 4) this.init(2, 10, true, 2, 3);
+    if (this.level === 5) this.init(1, 1, true, 40, 4);
+    if (this.level === 6) this.win();
   }
 
   death() {

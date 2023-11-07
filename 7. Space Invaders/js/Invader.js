@@ -87,7 +87,7 @@ export class Invader extends AliveObject {
       this.game.bunch.invaders.splice(invaderIndex, 1);
       this.game.bunch.recalculateSize();
 
-      this.game.score += 10 * this.maxHp;
+      this.game.score += 10 * this.maxHp * this.game.level;
 
       this.game.scoreEl.innerHTML = this.game.score;
     }, 0);
