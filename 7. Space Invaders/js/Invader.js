@@ -1,5 +1,7 @@
 import { AliveObject } from './AliveObject.js';
 import { EnemyBullet } from './EnemyBullet.js';
+import { WeaponAbility } from './WeaponAbility.js';
+import { LiveAbility } from './LiveAbility.js';
 
 export class Invader extends AliveObject {
   static width = 45;
@@ -90,6 +92,8 @@ export class Invader extends AliveObject {
       this.game.score += 10 * this.maxHp * this.game.level;
 
       this.game.scoreEl.innerHTML = this.game.score;
+
+      this.generateAbility();
     }, 0);
   }
 
@@ -101,5 +105,27 @@ export class Invader extends AliveObject {
         posY: this.posY + this.height,
       })
     );
+  }
+
+  generateAbility() {
+    const randomChance = Math.random();
+    if (randomChance < 0.05) {
+      const randomAbility = Math.random();
+
+      const ability =
+        randomAbility < 0.5
+          ? new WeaponAbility({
+              game: this.game,
+              posX: this.posX + this.width / 2,
+              posY: this.posY + this.height,
+            })
+          : new LiveAbility({
+              game: this.game,
+              posX: this.posX + this.width / 2,
+              posY: this.posY + this.height,
+            });
+
+      this.game.abilities.push(ability);
+    }
   }
 }

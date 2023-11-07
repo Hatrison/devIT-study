@@ -12,6 +12,8 @@ export class Player extends AliveObject {
     super({ game, posX, posY, width, height, velocity, imageSrc });
 
     this.canShoot = true;
+    this.reinforced = false;
+    this.reinforcedTimeoutId = null;
 
     this.keys = {
       pressed: {
@@ -67,6 +69,7 @@ export class Player extends AliveObject {
 
   update() {
     this.collideWithBullet();
+    this.collideWithAbility();
     this.render();
 
     const leftBorder = this.posX > 0;
@@ -122,14 +125,55 @@ export class Player extends AliveObject {
     });
   }
 
+  collideWithAbility() {
+    this.game.abilities.forEach(ability => {
+      const abilityTop = ability.posY - ability.radius;
+      const abilityBottom = ability.posY + ability.radius;
+      const abilityLeft = ability.posX - ability.radius;
+      const abilityRight = ability.posX + ability.radius;
+
+      const playerTop = this.posY;
+      const playerBottom = this.posY + this.height;
+      const playerLeft = this.posX;
+      const playerRight = this.posX + this.width;
+
+      const colliding =
+        abilityBottom >= playerTop &&
+        abilityTop <= playerBottom &&
+        abilityRight >= playerLeft &&
+        abilityLeft <= playerRight;
+
+      if (colliding) {
+        ability.applyAbility();
+
+        const abilityIndex = this.game.abilities.indexOf(ability);
+        this.game.abilities.splice(abilityIndex, 1);
+      }
+    });
+  }
+
   shoot() {
-    this.game.bullets.push(
-      new Bullet({
-        game: this.game,
-        posX: this.posX + this.width / 2,
-        posY: this.posY,
-      })
-    );
+    const amountOfAmmo = this.reinforced ? 2 : 1;
+    const ammo = [];
+
+    for (let i = 0; i < amountOfAmmo; i++) {
+      ammo.push(
+        this.reinforced
+          ? new Bullet({
+              game: this.game,
+              posX: this.posX + this.width / 2,
+              posY: this.posY,
+              velocity: 40,
+            })
+          : new Bullet({
+              game: this.game,
+              posX: this.posX + this.width / 2,
+              posY: this.posY,
+            })
+      );
+    }
+
+    this.game.bullets.push(...ammo);
   }
 
   reset() {

@@ -20,6 +20,7 @@ export class Game {
     this.level = 1;
     this.score = 0;
     this.lives = 2;
+    this.maxLives = 4;
     this.levelEl.innerHTML = this.level;
     this.scoreEl.innerHTML = this.score;
     this.livesEl.innerHTML = this.lives;
@@ -30,6 +31,7 @@ export class Game {
     this.bullets = [];
     this.enemyBullets = [];
     this.barricades = Barricade.createBarricades(this, 4);
+    this.abilities = [];
   }
 
   start() {
@@ -53,6 +55,10 @@ export class Game {
 
     this.enemyBullets.forEach(bullet => {
       bullet.update();
+    });
+
+    this.abilities.forEach(ability => {
+      ability.update();
     });
   }
 
@@ -110,5 +116,12 @@ export class Game {
 
   clear() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  increaseLive() {
+    if (this.lives < this.maxLives) {
+      this.lives++;
+      this.livesEl.innerText = this.lives;
+    }
   }
 }
