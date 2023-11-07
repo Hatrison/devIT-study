@@ -6,7 +6,7 @@ export class Player extends AliveObject {
     const width = 60;
     const height = 60;
     const posX = game.canvas.width / 2 - width / 2;
-    const posY = game.canvas.height - height - 20;
+    const posY = game.canvas.height - height - game.paddingBottom;
     const velocity = 7;
     const imageSrc = 'images/ship.png';
     super({ game, posX, posY, width, height, velocity, imageSrc });
@@ -134,6 +134,6 @@ export class Player extends AliveObject {
 
   reset() {
     this.posX = this.game.canvas.width / 2 - this.width / 2;
-    this.posY = this.game.canvas.height - this.height - 20;
+    this.posY = this.game.canvas.height - this.height - this.game.paddingBottom;
   }
 }

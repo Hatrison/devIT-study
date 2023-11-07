@@ -5,7 +5,7 @@ export class Invader extends AliveObject {
   static width = 45;
   static height = 45;
 
-  constructor({ game, posX = 0, posY = 0, velocity = 3 }) {
+  constructor({ game, posX = 0, posY = 0, velocity = 3, maxHp = 1 }) {
     const imageSrc = 'images/invader.png';
     super({
       game,
@@ -16,12 +16,37 @@ export class Invader extends AliveObject {
       velocity,
       imageSrc,
     });
+
+    this.maxHp = maxHp;
+    this.hp = this.maxHp;
+  }
+
+  render() {
+    super.render();
+
+    const healthBarWidth = this.width - 15;
+    const healthBarHeight = 5;
+    const healthBarX = this.posX - (healthBarWidth - this.width) / 2;
+    const healthBarY = this.posY - healthBarHeight - 5;
+    const currentHealth = this.hp / this.maxHp;
+
+    this.game.ctx.fillStyle = 'green';
+    this.game.ctx.fillRect(
+      healthBarX,
+      healthBarY,
+      healthBarWidth * currentHealth,
+      healthBarHeight
+    );
   }
 
   update(velocity) {
     this.render();
     this.move(velocity);
     this.collideWithBullet();
+
+    if (this.hp <= 0) {
+      this.death();
+    }
   }
 
   move(velocity) {
@@ -48,20 +73,24 @@ export class Invader extends AliveObject {
         bulletLeft <= invaderRight;
 
       if (colliding) {
-        setTimeout(() => {
-          const bulletIndex = this.game.bullets.indexOf(bullet);
-          this.game.bullets.splice(bulletIndex, 1);
+        this.hp--;
 
-          const invaderIndex = this.game.bunch.invaders.indexOf(this);
-          this.game.bunch.invaders.splice(invaderIndex, 1);
-          this.game.bunch.recalculateWidth();
-
-          this.game.score += 10;
-
-          this.game.scoreEl.innerHTML = this.game.score;
-        }, 0);
+        const bulletIndex = this.game.bullets.indexOf(bullet);
+        this.game.bullets.splice(bulletIndex, 1);
       }
     });
+  }
+
+  death() {
+    setTimeout(() => {
+      const invaderIndex = this.game.bunch.invaders.indexOf(this);
+      this.game.bunch.invaders.splice(invaderIndex, 1);
+      this.game.bunch.recalculateSize();
+
+      this.game.score += 10 * this.maxHp;
+
+      this.game.scoreEl.innerHTML = this.game.score;
+    }, 0);
   }
 
   shoot() {

@@ -1,5 +1,6 @@
 import { Player } from './Player.js';
 import { Bunch } from './Bunch.js';
+import { Barricade } from './Barricade.js';
 
 export class Game {
   constructor() {
@@ -8,12 +9,15 @@ export class Game {
     this.canvas.height = this.canvas.offsetHeight;
     this.ctx = this.canvas.getContext('2d');
 
+    this.paddingBottom = 20;
+
     this.scoreEl = document.getElementById('score-num');
     this.livesEl = document.getElementById('lives-num');
     this.levelEl = document.getElementById('level-num');
 
     this.player = new Player(this);
     this.bunch = new Bunch(this);
+    this.barricades = Barricade.createBarricades(this, 4);
     this.bullets = [];
     this.enemyBullets = [];
     this.level = 1;
@@ -30,6 +34,10 @@ export class Game {
     });
 
     this.clear();
+
+    this.barricades.forEach(barricade => {
+      barricade.update();
+    });
 
     this.player.update();
 
@@ -52,8 +60,7 @@ export class Game {
   gameOver() {
     window.cancelAnimationFrame(this.animationId);
     this.lives = 0;
-    this.bullets = [];
-    this.enemyBullets = [];
+    this.deleteObjects();
     this.clear();
 
     this.printText('Game Over', 'red', 48);
@@ -61,8 +68,7 @@ export class Game {
 
   win() {
     window.cancelAnimationFrame(this.animationId);
-    this.bullets = [];
-    this.enemyBullets = [];
+    this.deleteObjects();
     this.clear();
 
     this.printText('You win', 'green', 48, -40);
@@ -77,6 +83,14 @@ export class Game {
     const x = (this.canvas.width - textWidth) / 2;
     const y = this.canvas.height / 2 + deltaY;
     this.ctx.fillText(text, x, y);
+  }
+
+  deleteObjects() {
+    this.bullets = [];
+    this.enemyBullets = [];
+    this.bunch.invaders = [];
+    this.bunch = null;
+    this.player = null;
   }
 
   clear() {
