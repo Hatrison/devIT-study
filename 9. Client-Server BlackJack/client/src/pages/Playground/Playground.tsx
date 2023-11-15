@@ -4,17 +4,25 @@ import {
   Invitation,
   Main,
   Playground as StyledPlayground,
+  Title,
+  Message,
 } from './Playground.styled';
 import { Header } from 'components/Header/Header';
 import { Player } from 'components/Player/Player';
 import { Modal } from 'components/Modal/Modal';
 import { useEffect, useState } from 'react';
-import { Deck } from 'services/Deck';
 import { Button } from 'components/Button/Button';
 import { useAppDispatch } from 'hooks/useAppDispatch';
-import { cleanRoomData } from '../../redux/room/roomSlice';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/useAppSelector';
+import {
+  selectDealerCards,
+  selectPlayers,
+  selectRoomToken,
+  selectUserToken,
+} from '../../redux/room/selectors';
+import { exitRoom } from '../../redux/room/operations';
+import { toast } from 'react-toastify';
 
 type props = {
   playersNum: number;
@@ -38,23 +46,22 @@ const ButtonStyle: React.CSSProperties = {
  * @returns {ReactNode} The Playground component.
  */
 const Playground = ({ playersNum }: props): ReactNode => {
-  const [deck, setDeck] = useState<Deck>(new Deck());
-  const [players] = useState<number[]>(
-    Array.from({ length: playersNum }, (_, index) => index + 1)
-  );
+  const players = useAppSelector(selectPlayers);
+  const dealerCards = useAppSelector(selectDealerCards);
+  const roomToken = useAppSelector(selectRoomToken);
+  const userToken = useAppSelector(selectUserToken);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [activePlayer, setActivePlayer] = useState<number>(1);
   const [message, setMessage] = useState<string>('');
-  const token = useAppSelector(state => state.room.roomToken);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   /**
    * Effect to set the active player to the initial state when a new game starts.
    */
   useEffect(() => {
     setActivePlayer(1);
-  }, [deck]);
+  }, []);
 
   /**
    * Function to toggle the game over modal.
@@ -111,45 +118,47 @@ const Playground = ({ playersNum }: props): ReactNode => {
   }, []);
 
   const onExit = useCallback(() => {
-    dispatch(cleanRoomData());
+    dispatch(exitRoom({ roomToken, userToken }));
     navigate('/start', { replace: true });
   }, []);
 
   const copyToClipboard = useCallback(() => {
-    if (!token) return;
-    navigator.clipboard.writeText(token).catch(err => console.log(err));
-  }, [token]);
+    if (!roomToken) return;
+    navigator.clipboard.writeText(roomToken).then(() => {
+      toast.success('Copied to clipboard');
+    });
+  }, [roomToken]);
 
   return (
     <Main>
       <Button text={'Exit'} onClick={onExit} style={ButtonStyle} />
       <Header />
-      <Invitation onClick={copyToClipboard}>{token}</Invitation>
+      <Invitation onClick={copyToClipboard}>{roomToken}</Invitation>
       <Content>
         <Player
           name={'Dealer'}
-          deck={deck}
+          cards={dealerCards}
           isActive={false}
           onPlayerEndTurn={() => {}}
         />
       </Content>
       <StyledPlayground>
-        {players.map(playerId => (
+        {players.map(player => (
           <Player
-            name={`Player ${playerId}`}
-            deck={deck}
-            isActive={playerId === activePlayer}
+            name={`Player ${player.id}`}
+            cards={player.hand}
+            isActive={player.id === activePlayer}
             onPlayerEndTurn={handlePlayerEndTurn}
-            key={playerId}
+            key={player.id}
           />
         ))}
       </StyledPlayground>
       {isGameOver && (
-        <Modal
-          message={message}
-          handlerCloseModal={toggleModal}
-          setDeck={setDeck}
-        />
+        <Modal handlerCloseModal={toggleModal} setDeck={() => {}}>
+          <Title>Game Over</Title>
+          <Message>{message}</Message>
+          <Button text={'Restart'} onClick={() => toggleModal()} />
+        </Modal>
       )}
     </Main>
   );

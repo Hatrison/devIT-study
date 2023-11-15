@@ -1,10 +1,11 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, SyntheticEvent } from 'react';
 import { StyledButton } from './Button.styled';
 
 type props = {
   text: string;
   disabled?: boolean;
-  onClick?: () => void;
+  onClick?: (event: SyntheticEvent) => void;
+  type?: 'button' | 'submit' | 'reset';
   style?: React.CSSProperties;
 };
 
@@ -23,10 +24,11 @@ export const Button = ({
   disabled = false,
   onClick,
   style,
+  type = 'button',
 }: props): ReactNode => {
   return (
     <StyledButton
-      type="button"
+      type={type}
       disabled={disabled}
       onClick={onClick}
       style={style}

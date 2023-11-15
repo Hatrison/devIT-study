@@ -24,13 +24,3 @@ export const ModalContainer = styled.div`
   border-radius: 10px;
   width: 500px;
 `;
-
-export const Title = styled.h2`
-  font-size: 50px;
-  color: black;
-`;
-
-export const Message = styled.p`
-  font-size: 30px;
-  color: black;
-`;

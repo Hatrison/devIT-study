@@ -1,27 +1,34 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createRoom } from './operations';
+import { createRoom, exitRoom, joinRoom } from './operations';
+import { TState } from './room.types';
 
-const initialState = {
+const initialState: TState = {
   roomToken: null,
   userToken: null,
+  players: [],
+  dealerCards: [],
 };
 
 const roomSlice = createSlice({
   name: 'room',
   initialState,
   reducers: {
-    cleanRoomData(state) {
-      state.roomToken = null;
-      state.userToken = null;
-    },
+    cleanRoom: () => initialState,
   },
   extraReducers: builder => {
-    builder.addCase(createRoom.fulfilled, (state, action) => {
-      state.roomToken = action.payload.roomToken;
-      state.userToken = action.payload.userToken;
-    });
+    builder
+      .addCase(createRoom.fulfilled, (state, action) => {
+        return { ...state, ...action.payload };
+      })
+      .addCase(joinRoom.fulfilled, (state, action) => {
+        return { ...state, ...action.payload };
+      })
+      .addCase(exitRoom.fulfilled, (state, action) => {
+        return { ...initialState };
+      });
   },
 });
 
-export const { cleanRoomData } = roomSlice.actions;
+export const { cleanRoom } = roomSlice.actions;
+
 export const roomReducer = roomSlice.reducer;

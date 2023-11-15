@@ -15,6 +15,7 @@ import { roomReducer } from './room/roomSlice';
 const persistConfig = {
   key: 'roomToken',
   storage,
+  whitelist: ['roomToken', 'userToken'],
 };
 
 const rootReducer = combineReducers({

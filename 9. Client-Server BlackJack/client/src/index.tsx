@@ -6,6 +6,8 @@ import { GlobalStyle } from './GlobalStyles.styled';
 import { Provider } from 'react-redux';
 import { persistor, store } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -14,6 +16,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <BrowserRouter>
           <App />
           <GlobalStyle />
+          <ToastContainer />
         </BrowserRouter>
       </PersistGate>
     </Provider>

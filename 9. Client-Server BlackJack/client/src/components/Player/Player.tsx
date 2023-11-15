@@ -3,11 +3,12 @@ import { PlayerButtons, PlayerWrapper } from './Player.styled';
 import { CardTable } from '../CardTable/CardTable';
 import { useCallback, useEffect, useState } from 'react';
 import { Button } from '../Button/Button';
-import { Deck, TCard } from '../../services/Deck';
+import { TCard } from '../../redux/room/room.types';
+import { Card } from '../Card/Card';
 
 type props = {
   name: string;
-  deck: Deck;
+  cards: TCard[];
   isActive: boolean;
   onPlayerEndTurn: () => void;
 };
@@ -18,26 +19,18 @@ type props = {
  * @component
  * @param {Object} props - The component props.
  * @param {string} props.name - The name of the player.
- * @param {Deck} props.deck - The game deck.
+ * @param {TCard[]} props.cards - The game deck.
  * @param {boolean} props.isActive - Indicates whether the player is active.
  * @param {Function} props.onPlayerEndTurn - Callback function triggered at the end of the player's turn.
  * @returns {ReactNode} The Player component.
  */
 export const Player = ({
   name,
-  deck,
+  cards = [],
   isActive,
   onPlayerEndTurn,
 }: props): ReactNode => {
   const [score, setScore] = useState<number>(0);
-  const [cards, setCards] = useState<TCard[]>([]);
-
-  /**
-   * Effect to deal initial cards to the player after the first render.
-   */
-  useEffect(() => {
-    setCards(deck.deal(2));
-  }, [deck]);
 
   /**
    * Effect to calculate the player's score.
@@ -68,9 +61,7 @@ export const Player = ({
   /**
    * Callback function for the "hit" action to deal an additional card to the player.
    */
-  const hit = useCallback(() => {
-    setCards(cards => [...cards, ...deck.deal(1)]);
-  }, []);
+  const hit = useCallback(() => {}, []);
 
   /**
    * Callback function for the "stand" action to end the player's turn.
@@ -83,14 +74,18 @@ export const Player = ({
     <CardTable
       name={name}
       score={score}
-      cards={cards.map(card => card.component)}
+      cards={cards.map(card => (
+        <Card rank={card.rank} suit={card.suit} key={card.rank + card.suit} />
+      ))}
     />
   ) : (
     <PlayerWrapper>
       <CardTable
         name={name}
         score={score}
-        cards={cards.map(card => card.component)}
+        cards={cards.map(card => (
+          <Card rank={card.rank} suit={card.suit} key={card.rank + card.suit} />
+        ))}
       />
       <PlayerButtons>
         <li>

@@ -34,3 +34,13 @@ export const Playground = styled.div`
   justify-content: center;
   width: 100%;
 `;
+
+export const Title = styled.h2`
+  font-size: 50px;
+  color: black;
+`;
+
+export const Message = styled.p`
+  font-size: 30px;
+  color: black;
+`;

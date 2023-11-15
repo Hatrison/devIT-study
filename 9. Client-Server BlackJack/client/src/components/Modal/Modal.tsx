@@ -1,15 +1,14 @@
-import { Backdrop, Message, ModalContainer, Title } from './Modal.styled';
-import { Button } from '../Button/Button';
+import { Backdrop, ModalContainer } from './Modal.styled';
 import { createPortal } from 'react-dom';
-import React, { useCallback, useEffect } from 'react';
-import { Deck } from '../../services/Deck';
+import React, { ReactNode, useCallback, useEffect } from 'react';
+import { Deck } from '../../../../../6. BlackJack (Native)/js/Deck';
 
 const modalRoot = document.querySelector('#modal-root');
 
 type props = {
-  message: string;
   handlerCloseModal: () => void;
   setDeck: React.Dispatch<React.SetStateAction<Deck>>;
+  children?: ReactNode;
 };
 
 /**
@@ -17,21 +16,20 @@ type props = {
  *
  * @component
  * @param {Object} props - The component props.
- * @param {string} props.message - The message to be displayed in the modal.
  * @param {Function} props.handlerCloseModal - Callback to close the modal.
  * @param {React.Dispatch<React.SetStateAction<Deck>>} props.setDeck - State setter for the deck.
  * @returns {React.ReactPortal} The Modal component.
  */
 export const Modal = ({
-  message,
   handlerCloseModal,
   setDeck,
+  children,
 }: props): React.ReactPortal => {
   /**
    * Callback to handle the restart and reset the deck.
    */
   const onRestart = useCallback(() => {
-    setDeck(new Deck());
+    //setDeck(new Deck());
     handlerCloseModal();
   }, [handlerCloseModal, setDeck]);
 
@@ -72,11 +70,7 @@ export const Modal = ({
 
   return createPortal(
     <Backdrop onClick={handleBackdropClick}>
-      <ModalContainer>
-        <Title>Game Over</Title>
-        <Message>{message}</Message>
-        <Button text={'Restart'} onClick={() => onRestart()} />
-      </ModalContainer>
+      <ModalContainer>{children}</ModalContainer>
     </Backdrop>,
     modalRoot as HTMLElement
   );
