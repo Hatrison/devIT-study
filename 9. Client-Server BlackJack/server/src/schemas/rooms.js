@@ -3,9 +3,21 @@ const { Schema, model } = require('mongoose');
 
 const roomSchema = new Schema(
   {
-    smth: {
-      type: String,
-      default: '',
+    cards: {
+      type: Array,
+      default: [],
+    },
+    players: {
+      type: Array,
+      default: [],
+    },
+    dealerCards: {
+      type: Array,
+      default: [],
+    },
+    started: {
+      type: Boolean,
+      default: false,
     },
   },
   { versionKey: false, timestamps: true }

@@ -1,23 +1,6 @@
-import React from 'react';
-import { Card } from '../components/Card/Card';
-import { ReactNode } from 'react';
+const Card = require('./Card');
 
-type TRank = {
-  name: string;
-  value: number;
-};
-
-export type TCard = {
-  component: ReactNode;
-  value: number;
-  rank: string;
-};
-
-export class Deck {
-  private readonly cards: TCard[];
-  private suits: string[];
-  private ranks: TRank[];
-
+class Deck {
   constructor() {
     this.cards = [];
     this.suits = ['♥', '♦', '♣', '♠'];
@@ -40,13 +23,7 @@ export class Deck {
     // Initialize the deck by creating cards with all possible combinations of suits and ranks.
     this.ranks.forEach(rank => {
       this.suits.forEach(suit => {
-        this.cards.push({
-          component: (
-            <Card rank={rank.name} suit={suit} key={rank.name + suit} />
-          ),
-          value: rank.value,
-          rank: rank.name,
-        });
+        this.cards.push(new Card(rank, suit));
       });
     });
 
@@ -56,7 +33,7 @@ export class Deck {
   /**
    * Shuffle the order of cards in the deck.
    */
-  private shuffle() {
+  shuffle() {
     let currentIndex = this.cards.length;
     let temporaryValue;
     let randomIndex;
@@ -74,9 +51,11 @@ export class Deck {
   /**
    * Deal a specified number of cards from the deck.
    * @param {number} num - The number of cards to deal.
-   * @returns {Card[]} An array of dealt cards.
+   * @returns {[]} An array of dealt cards.
    */
-  public deal(num: number): TCard[] {
+  deal(num) {
     return this.cards.splice(0, num);
   }
 }
+
+module.exports = Deck;

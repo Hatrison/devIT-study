@@ -7,4 +7,6 @@ router.post('/create-room', contrs.createRoom);
 
 router.post('/join-room', auth, contrs.joinRoom);
 
+router.post('/exit-room', auth, contrs.exitRoom);
+
 module.exports = router;
