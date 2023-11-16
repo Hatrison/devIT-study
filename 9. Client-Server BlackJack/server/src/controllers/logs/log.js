@@ -1,5 +1,6 @@
 const Room = require('../../schemas/rooms');
 const calcScore = require('../../helpers/calcScore');
+const checkWinner = require('../../helpers/checkWinner');
 
 const log = async (req, res) => {
   const uid = req?.user?.uid;
@@ -61,6 +62,20 @@ const log = async (req, res) => {
       return res
         .status(400)
         .json({ message: `You aren't a participant in this room ` });
+    }
+
+    if (room.currentTurn + 1 > room.players.length) {
+      const message = checkWinner(room.players, room.dealer);
+
+      await Room.findByIdAndUpdate(rid, {
+        gameEnded: true,
+        gameResult: message,
+        history: [...room.history, `Game ended. ${message}`],
+      });
+
+      return res
+        .status(201)
+        .json({ isGameOver: true, winningMessage: message });
     }
 
     const updatedRoom = await Room.findByIdAndUpdate(

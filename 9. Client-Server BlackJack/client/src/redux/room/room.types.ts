@@ -22,4 +22,6 @@ export type TState = {
   dealer: TDealer;
   id: number;
   turnId: number;
+  isGameOver: boolean;
+  winningMessage: string;
 };

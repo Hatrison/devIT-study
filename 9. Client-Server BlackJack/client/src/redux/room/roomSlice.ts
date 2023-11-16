@@ -12,6 +12,8 @@ const initialState: TState = {
   },
   id: 0,
   turnId: 0,
+  isGameOver: false,
+  winningMessage: '',
 };
 
 const roomSlice = createSlice({
@@ -28,7 +30,7 @@ const roomSlice = createSlice({
       .addCase(joinRoom.fulfilled, (state, action) => {
         return { ...state, ...action.payload };
       })
-      .addCase(exitRoom.fulfilled, (state, action) => {
+      .addCase(exitRoom.fulfilled, () => {
         return { ...initialState };
       })
       .addCase(makeAction.fulfilled, (state, action) => {

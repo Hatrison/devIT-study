@@ -11,3 +11,8 @@ export const selectDealer = (state: RootState) => state.room.dealer;
 export const selectId = (state: RootState) => state.room.id;
 
 export const selectTurnId = (state: RootState) => state.room.turnId;
+
+export const selectIsGameOver = (state: RootState) => state.room.isGameOver;
+
+export const selectWinningMessage = (state: RootState) =>
+  state.room.winningMessage;

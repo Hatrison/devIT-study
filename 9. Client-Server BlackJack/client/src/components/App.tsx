@@ -17,7 +17,7 @@ export const App = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="/start" element={<Start />} />
-        <Route path="/playground" element={<Playground playersNum={0} />} />
+        <Route path="/playground" element={<Playground />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

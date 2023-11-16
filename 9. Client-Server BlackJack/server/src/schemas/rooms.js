@@ -23,6 +23,14 @@ const roomSchema = new Schema(
       type: Number,
       default: 0,
     },
+    gameEnded: {
+      type: Boolean,
+      default: false,
+    },
+    gameResult: {
+      type: String,
+      default: '',
+    },
     history: {
       type: Array,
       default: [],

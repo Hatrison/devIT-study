@@ -51,6 +51,12 @@ const joinRoom = async (req, res) => {
     return res.status(404).json({ message: 'Room not found' });
   }
 
+  if (room.gameEnded) {
+    return res
+      .status(201)
+      .json({ isGameOver: true, winningMessage: room.gameResult });
+  }
+
   if (room.started && !uid) {
     return res.status(400).json({ message: 'Room already started' });
   }

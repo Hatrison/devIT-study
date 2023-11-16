@@ -70,7 +70,7 @@ const Start = () => {
         />
       </ButtonWrapper>
       {modalOpened && (
-        <Modal handlerCloseModal={() => toggleModal()} setDeck={() => {}}>
+        <Modal handlerCloseModal={() => toggleModal()}>
           <Form>
             <Message>Enter room token</Message>
             <Input value={invitationToken} onChange={onChange} />

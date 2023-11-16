@@ -1,13 +1,11 @@
 import { Backdrop, ModalContainer } from './Modal.styled';
 import { createPortal } from 'react-dom';
 import React, { ReactNode, useCallback, useEffect } from 'react';
-import { Deck } from '../../../../../6. BlackJack (Native)/js/Deck';
 
 const modalRoot = document.querySelector('#modal-root');
 
 type props = {
   handlerCloseModal: () => void;
-  setDeck: React.Dispatch<React.SetStateAction<Deck>>;
   children?: ReactNode;
 };
 
@@ -17,12 +15,10 @@ type props = {
  * @component
  * @param {Object} props - The component props.
  * @param {Function} props.handlerCloseModal - Callback to close the modal.
- * @param {React.Dispatch<React.SetStateAction<Deck>>} props.setDeck - State setter for the deck.
  * @returns {React.ReactPortal} The Modal component.
  */
 export const Modal = ({
   handlerCloseModal,
-  setDeck,
   children,
 }: props): React.ReactPortal => {
   /**
@@ -31,7 +27,7 @@ export const Modal = ({
   const onRestart = useCallback(() => {
     //setDeck(new Deck());
     handlerCloseModal();
-  }, [handlerCloseModal, setDeck]);
+  }, [handlerCloseModal]);
 
   /**
    * Callback to handle the Escape key press event and close the modal.
