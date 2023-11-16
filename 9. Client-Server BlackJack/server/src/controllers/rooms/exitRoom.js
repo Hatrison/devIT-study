@@ -1,4 +1,5 @@
 const Room = require('../../schemas/rooms');
+const returnCards = require('../../helpers/returnCards');
 const exitRoom = async (req, res) => {
   const { rid } = req.room;
   const uid = req?.user?.uid;
@@ -25,6 +26,13 @@ const exitRoom = async (req, res) => {
         $pull: {
           players: { uid },
         },
+        history: [
+          ...room.history,
+          `Player ${player.id} left the game`,
+          `Player ${player.id} cards returned to deck: ${returnCards(
+            player.hand
+          )}`,
+        ],
       },
       { new: true }
     );

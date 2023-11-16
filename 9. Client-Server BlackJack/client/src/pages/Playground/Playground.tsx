@@ -16,9 +16,11 @@ import { useAppDispatch } from 'hooks/useAppDispatch';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import {
-  selectDealerCards,
+  selectDealer,
+  selectId,
   selectPlayers,
   selectRoomToken,
+  selectTurnId,
   selectUserToken,
 } from '../../redux/room/selectors';
 import { exitRoom } from '../../redux/room/operations';
@@ -47,9 +49,11 @@ const ButtonStyle: React.CSSProperties = {
  */
 const Playground = ({ playersNum }: props): ReactNode => {
   const players = useAppSelector(selectPlayers);
-  const dealerCards = useAppSelector(selectDealerCards);
+  const dealer = useAppSelector(selectDealer);
   const roomToken = useAppSelector(selectRoomToken);
   const userToken = useAppSelector(selectUserToken);
+  const id = useAppSelector(selectId);
+  const turnId = useAppSelector(selectTurnId);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
@@ -60,8 +64,8 @@ const Playground = ({ playersNum }: props): ReactNode => {
    * Effect to set the active player to the initial state when a new game starts.
    */
   useEffect(() => {
-    setActivePlayer(1);
-  }, []);
+    setActivePlayer(id);
+  }, [id]);
 
   /**
    * Function to toggle the game over modal.
@@ -137,9 +141,9 @@ const Playground = ({ playersNum }: props): ReactNode => {
       <Content>
         <Player
           name={'Dealer'}
-          cards={dealerCards}
+          cards={dealer.hand}
+          score={dealer.score}
           isActive={false}
-          onPlayerEndTurn={() => {}}
         />
       </Content>
       <StyledPlayground>
@@ -147,8 +151,8 @@ const Playground = ({ playersNum }: props): ReactNode => {
           <Player
             name={`Player ${player.id}`}
             cards={player.hand}
-            isActive={player.id === activePlayer}
-            onPlayerEndTurn={handlePlayerEndTurn}
+            score={player.score}
+            isActive={turnId === activePlayer && turnId === player.id}
             key={player.id}
           />
         ))}

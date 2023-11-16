@@ -7,11 +7,19 @@ export type TCard = {
 export type TPlayer = {
   hand: TCard[];
   id: number;
+  score: number;
+};
+
+export type TDealer = {
+  hand: TCard[];
+  score: number;
 };
 
 export type TState = {
   roomToken: string | null;
   userToken: string | null;
   players: TPlayer[];
-  dealerCards: TCard[];
+  dealer: TDealer;
+  id: number;
+  turnId: number;
 };

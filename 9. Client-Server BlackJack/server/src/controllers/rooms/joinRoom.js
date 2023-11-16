@@ -2,6 +2,8 @@ const Room = require('../../schemas/rooms');
 const createToken = require('../../helpers/createToken');
 const { nanoid } = require('nanoid');
 const Player = require('../../utils/Player');
+const returnCards = require('../../helpers/returnCards');
+const calcScore = require('../../helpers/calcScore');
 
 const addPlayerToRoom = async room => {
   const player = new Player();
@@ -13,8 +15,15 @@ const addPlayerToRoom = async room => {
     {
       cards: room.cards,
       $push: {
-        players: { ...player, uid: playerId },
+        players: { ...player, score: calcScore(player.hand), uid: playerId },
       },
+      history: [
+        ...room.history,
+        `Player ${player.id} joined the game`,
+        `Player ${player.id} cards dealt with cards: ${returnCards(
+          player.hand
+        )}`,
+      ],
     },
     { new: true }
   );
@@ -25,8 +34,10 @@ const addPlayerToRoom = async room => {
   return {
     roomToken,
     userToken,
-    dealerCards: updatedRoom.dealerCards,
+    dealer: updatedRoom.dealer,
     players: updatedRoom.players.map(player => delete player.uid && player),
+    id: player.id,
+    turnId: updatedRoom.currentTurn,
   };
 };
 
@@ -62,8 +73,10 @@ const joinRoom = async (req, res) => {
     return res.status(201).json({
       roomToken,
       userToken,
-      dealerCards: room.dealerCards,
+      dealer: room.dealer,
       players: room.players.map(player => delete player.uid && player),
+      id: player.id,
+      turnId: room.currentTurn,
     });
   }
 

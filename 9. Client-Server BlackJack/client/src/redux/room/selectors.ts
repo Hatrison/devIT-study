@@ -6,4 +6,8 @@ export const selectUserToken = (state: RootState) => state.room.userToken;
 
 export const selectPlayers = (state: RootState) => state.room.players;
 
-export const selectDealerCards = (state: RootState) => state.room.dealerCards;
+export const selectDealer = (state: RootState) => state.room.dealer;
+
+export const selectId = (state: RootState) => state.room.id;
+
+export const selectTurnId = (state: RootState) => state.room.turnId;

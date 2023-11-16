@@ -1,16 +1,18 @@
 import React, { ReactNode } from 'react';
 import { PlayerButtons, PlayerWrapper } from './Player.styled';
 import { CardTable } from '../CardTable/CardTable';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { Button } from '../Button/Button';
 import { TCard } from '../../redux/room/room.types';
 import { Card } from '../Card/Card';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { makeAction } from '../../redux/room/operations';
 
 type props = {
   name: string;
   cards: TCard[];
+  score: number;
   isActive: boolean;
-  onPlayerEndTurn: () => void;
 };
 
 /**
@@ -20,55 +22,31 @@ type props = {
  * @param {Object} props - The component props.
  * @param {string} props.name - The name of the player.
  * @param {TCard[]} props.cards - The game deck.
+ * @param {number} props.score - The player's score.
  * @param {boolean} props.isActive - Indicates whether the player is active.
- * @param {Function} props.onPlayerEndTurn - Callback function triggered at the end of the player's turn.
  * @returns {ReactNode} The Player component.
  */
 export const Player = ({
   name,
   cards = [],
+  score = 0,
   isActive,
-  onPlayerEndTurn,
 }: props): ReactNode => {
-  const [score, setScore] = useState<number>(0);
-
-  /**
-   * Effect to calculate the player's score.
-   */
-  useEffect(() => {
-    let { total, numAces } = cards.reduce(
-      (acc, card) => {
-        return {
-          total: acc.total + card.value,
-          numAces: acc.numAces + (card.rank === 'A' ? 1 : 0),
-        };
-      },
-      { total: 0, numAces: 0 }
-    );
-
-    while (numAces > 0 && total > 21) {
-      total -= 10;
-      numAces--;
-    }
-
-    setScore(total);
-
-    if (total > 21) {
-      onPlayerEndTurn();
-    }
-  }, [cards]);
+  const dispatch = useAppDispatch();
 
   /**
    * Callback function for the "hit" action to deal an additional card to the player.
    */
-  const hit = useCallback(() => {}, []);
+  const hit = useCallback(() => {
+    dispatch(makeAction('hit'));
+  }, []);
 
   /**
    * Callback function for the "stand" action to end the player's turn.
    */
   const stand = useCallback(() => {
-    onPlayerEndTurn();
-  }, [onPlayerEndTurn]);
+    dispatch(makeAction('stand'));
+  }, []);
 
   return name === 'Dealer' ? (
     <CardTable

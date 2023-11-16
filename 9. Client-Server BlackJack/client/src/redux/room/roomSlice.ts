@@ -1,12 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createRoom, exitRoom, joinRoom } from './operations';
+import { createRoom, exitRoom, joinRoom, makeAction } from './operations';
 import { TState } from './room.types';
 
 const initialState: TState = {
   roomToken: null,
   userToken: null,
   players: [],
-  dealerCards: [],
+  dealer: {
+    hand: [],
+    score: 0,
+  },
+  id: 0,
+  turnId: 0,
 };
 
 const roomSlice = createSlice({
@@ -25,6 +30,9 @@ const roomSlice = createSlice({
       })
       .addCase(exitRoom.fulfilled, (state, action) => {
         return { ...initialState };
+      })
+      .addCase(makeAction.fulfilled, (state, action) => {
+        return { ...state, ...action.payload };
       });
   },
 });

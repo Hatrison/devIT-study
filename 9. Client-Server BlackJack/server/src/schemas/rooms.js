@@ -11,13 +11,21 @@ const roomSchema = new Schema(
       type: Array,
       default: [],
     },
-    dealerCards: {
-      type: Array,
-      default: [],
+    dealer: {
+      type: Object,
+      default: {},
     },
     started: {
       type: Boolean,
       default: false,
+    },
+    currentTurn: {
+      type: Number,
+      default: 0,
+    },
+    history: {
+      type: Array,
+      default: [],
     },
   },
   { versionKey: false, timestamps: true }
