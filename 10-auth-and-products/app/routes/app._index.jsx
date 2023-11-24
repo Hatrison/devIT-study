@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { json } from "@remix-run/node";
-import { useActionData, useNavigation, useSubmit } from "@remix-run/react";
+import { useEffect } from 'react';
+import { json } from '@remix-run/node';
+import { useActionData, useNavigation, useSubmit } from '@remix-run/react';
 import {
   Page,
   Layout,
@@ -12,18 +12,18 @@ import {
   List,
   Link,
   InlineStack,
-} from "@shopify/polaris";
-import { authenticate } from "../shopify.server";
+} from '@shopify/polaris';
+import { authenticate } from '../shopify.server';
 
 export const loader = async ({ request }) => {
-  await authenticate.admin(request);
+  await authenticate(request);
 
   return null;
 };
 
 export const action = async ({ request }) => {
-  const { admin } = await authenticate.admin(request);
-  const color = ["Red", "Orange", "Yellow", "Green"][
+  const { admin } = await authenticate(request);
+  const color = ['Red', 'Orange', 'Yellow', 'Green'][
     Math.floor(Math.random() * 4)
   ];
   const response = await admin.graphql(
@@ -69,18 +69,18 @@ export default function Index() {
   const actionData = useActionData();
   const submit = useSubmit();
   const isLoading =
-    ["loading", "submitting"].includes(nav.state) && nav.formMethod === "POST";
+    ['loading', 'submitting'].includes(nav.state) && nav.formMethod === 'POST';
   const productId = actionData?.product?.id.replace(
-    "gid://shopify/Product/",
-    ""
+    'gid://shopify/Product/',
+    ''
   );
 
   useEffect(() => {
     if (productId) {
-      shopify.toast.show("Product created");
+      shopify.toast.show('Product created');
     }
   }, [productId]);
-  const generateProduct = () => submit({}, { replace: true, method: "POST" });
+  const generateProduct = () => submit({}, { replace: true, method: 'POST' });
 
   return (
     <Page>
@@ -99,26 +99,26 @@ export default function Index() {
                     Congrats on creating a new Shopify app 🎉
                   </Text>
                   <Text variant="bodyMd" as="p">
-                    This embedded app template uses{" "}
+                    This embedded app template uses{' '}
                     <Link
                       url="https://shopify.dev/docs/apps/tools/app-bridge"
                       target="_blank"
                       removeUnderline
                     >
                       App Bridge
-                    </Link>{" "}
-                    interface examples like an{" "}
+                    </Link>{' '}
+                    interface examples like an{' '}
                     <Link url="/app/additional" removeUnderline>
                       additional page in the app nav
                     </Link>
-                    , as well as an{" "}
+                    , as well as an{' '}
                     <Link
                       url="https://shopify.dev/docs/api/admin-graphql"
                       target="_blank"
                       removeUnderline
                     >
                       Admin GraphQL
-                    </Link>{" "}
+                    </Link>{' '}
                     mutation demo, to provide a starting point for app
                     development.
                   </Text>
@@ -129,14 +129,14 @@ export default function Index() {
                   </Text>
                   <Text as="p" variant="bodyMd">
                     Generate a product with GraphQL and get the JSON output for
-                    that product. Learn more about the{" "}
+                    that product. Learn more about the{' '}
                     <Link
                       url="https://shopify.dev/docs/api/admin-graphql/latest/mutations/productCreate"
                       target="_blank"
                       removeUnderline
                     >
                       productCreate
-                    </Link>{" "}
+                    </Link>{' '}
                     mutation in our API references.
                   </Text>
                 </BlockStack>
@@ -215,7 +215,7 @@ export default function Index() {
                         >
                           Polaris
                         </Link>
-                        {", "}
+                        {', '}
                         <Link
                           url="https://shopify.dev/docs/apps/tools/app-bridge"
                           target="_blank"
@@ -247,19 +247,19 @@ export default function Index() {
                   </Text>
                   <List>
                     <List.Item>
-                      Build an{" "}
+                      Build an{' '}
                       <Link
                         url="https://shopify.dev/docs/apps/getting-started/build-app-example"
                         target="_blank"
                         removeUnderline
                       >
-                        {" "}
+                        {' '}
                         example app
-                      </Link>{" "}
+                      </Link>{' '}
                       to get started
                     </List.Item>
                     <List.Item>
-                      Explore Shopify’s API with{" "}
+                      Explore Shopify’s API with{' '}
                       <Link
                         url="https://shopify.dev/docs/apps/tools/graphiql-admin-api"
                         target="_blank"

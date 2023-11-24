@@ -1,4 +1,3 @@
-require('dotenv').config();
 const crypto = require('crypto');
 
 const validateHMAC = (hmac, params) => {
@@ -10,4 +9,4 @@ const validateHMAC = (hmac, params) => {
   return crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(hmac || ''));
 };
 
-module.exports = validateHMAC;
+export default validateHMAC;

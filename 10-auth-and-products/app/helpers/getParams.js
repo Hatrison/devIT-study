@@ -7,4 +7,4 @@ const getParams = url => {
   return { hmac, searchParams, updatedParams };
 };
 
-module.exports = getParams;
+export default getParams;
