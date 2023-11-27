@@ -1,10 +1,8 @@
-export class Barricade {
+import { GameObject } from './GameObject.js';
+
+export class Barricade extends GameObject {
   constructor({ game, posX, posY, width, height }) {
-    this.game = game;
-    this.posX = posX;
-    this.posY = posY;
-    this.width = width;
-    this.height = height;
+    super({ game, posX, posY, width, height });
 
     this.maxHp = 5;
     this.hp = this.maxHp;

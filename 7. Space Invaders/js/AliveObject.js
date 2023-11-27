@@ -1,12 +1,8 @@
-export class AliveObject {
-  constructor({ game, posX, posY, width, height, velocity, imageSrc }) {
-    this.game = game;
-    this.posX = posX;
-    this.posY = posY;
-    this.width = width;
-    this.height = height;
+import { GameObject } from './GameObject.js';
 
-    this.velocity = velocity;
+export class AliveObject extends GameObject {
+  constructor({ game, posX, posY, width, height, velocity, imageSrc }) {
+    super({ game, posX, posY, velocity, width, height });
 
     this.img = new Image();
     this.img.src = imageSrc;

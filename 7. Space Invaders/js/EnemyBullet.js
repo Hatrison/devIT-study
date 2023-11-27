@@ -1,11 +1,8 @@
-export class EnemyBullet {
+import { GameObject } from './GameObject.js';
+
+export class EnemyBullet extends GameObject {
   constructor({ game, posX, posY, velocity = 10 }) {
-    this.game = game;
-    this.posX = posX;
-    this.posY = posY;
-    this.velocity = velocity;
-    this.width = 3;
-    this.height = 10;
+    super({ game, posX, posY, velocity, width: 3, height: 10 });
   }
 
   render() {

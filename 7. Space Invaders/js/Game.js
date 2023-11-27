@@ -41,24 +41,17 @@ export class Game {
 
     this.clear();
 
-    this.barricades.forEach(barricade => {
-      barricade.update();
-    });
+    const objects = [
+      ...this.barricades,
+      ...this.bullets,
+      ...this.enemyBullets,
+      ...this.abilities,
+      this.bunch,
+      this.player,
+    ];
 
-    this.player.update();
-
-    this.bullets.forEach(bullet => {
-      bullet.update();
-    });
-
-    this.bunch.update();
-
-    this.enemyBullets.forEach(bullet => {
-      bullet.update();
-    });
-
-    this.abilities.forEach(ability => {
-      ability.update();
+    objects.forEach(object => {
+      object.update();
     });
   }
 

@@ -1,6 +1,7 @@
 import { Invader } from './Invader.js';
+import { GameObject } from './GameObject.js';
 
-export class Bunch {
+export class Bunch extends GameObject {
   constructor(
     game,
     rows = 3,
@@ -9,9 +10,9 @@ export class Bunch {
     maxHp = 2,
     velocity = 3
   ) {
-    this.game = game;
-    this.posX = 0;
-    this.posY = 0;
+    super({
+      game,
+    });
     this.velocity = {
       x: velocity,
       y: 0,

@@ -1,11 +1,10 @@
-export class Ability {
+import { GameObject } from './GameObject.js';
+
+export class Ability extends GameObject {
   constructor({ game, posY, posX, radius = 20, color = 'red', velocity = 5 }) {
-    this.game = game;
-    this.posX = posX;
-    this.posY = posY;
+    super({ game, posX, posY, velocity });
     this.radius = radius;
     this.color = color;
-    this.velocity = velocity;
   }
 
   render() {
