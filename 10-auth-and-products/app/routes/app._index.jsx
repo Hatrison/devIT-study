@@ -22,45 +22,8 @@ export const loader = async ({ request }) => {
 };
 
 export const action = async ({ request }) => {
-  const { admin } = await authenticate(request);
-  const color = ['Red', 'Orange', 'Yellow', 'Green'][
-    Math.floor(Math.random() * 4)
-  ];
-  const response = await admin.graphql(
-    `#graphql
-      mutation populateProduct($input: ProductInput!) {
-        productCreate(input: $input) {
-          product {
-            id
-            title
-            handle
-            status
-            variants(first: 10) {
-              edges {
-                node {
-                  id
-                  price
-                  barcode
-                  createdAt
-                }
-              }
-            }
-          }
-        }
-      }`,
-    {
-      variables: {
-        input: {
-          title: `${color} Snowboard`,
-          variants: [{ price: Math.random() * 100 }],
-        },
-      },
-    }
-  );
-  const responseJson = await response.json();
-
   return json({
-    product: responseJson.data.productCreate.product,
+    product: {},
   });
 };
 
@@ -70,10 +33,7 @@ export default function Index() {
   const submit = useSubmit();
   const isLoading =
     ['loading', 'submitting'].includes(nav.state) && nav.formMethod === 'POST';
-  const productId = actionData?.product?.id.replace(
-    'gid://shopify/Product/',
-    ''
-  );
+  const productId = '';
 
   useEffect(() => {
     if (productId) {

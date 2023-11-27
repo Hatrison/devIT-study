@@ -2,6 +2,7 @@ import getParams from '../helpers/getParams';
 import validateHMAC from '../helpers/validateHMAC';
 import stateNonce from '../helpers/stateNonce';
 import axios from 'axios';
+import { userCookie } from '../cookie/cookies.server';
 
 const { json, redirect } = require('@remix-run/node');
 
@@ -38,11 +39,18 @@ const authCallback = async req => {
   };
 
   const response = await axios.post(url, options);
-  console.log(response.data);
+  const accessToken = response.data?.access_token;
+  console.log('access_token: ', accessToken);
 
   const host = searchParams.get('host');
   const sanitizedHost = host.replace(/[^a-zA-Z0-9]/g, '');
-  throw redirect(`/?shop=${shop}&host=${encodeURIComponent(sanitizedHost)}`);
+  throw redirect(`/?shop=${shop}&host=${encodeURIComponent(sanitizedHost)}`, {
+    headers: {
+      'Set-Cookie': await userCookie.serialize({
+        session: accessToken,
+      }),
+    },
+  });
 };
 
 export default authCallback;
