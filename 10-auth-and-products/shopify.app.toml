@@ -2,7 +2,7 @@
 
 name = "app for learning"
 client_id = "e0f37b0435832fadf7a31dc75051f066"
-application_url = "https://6425-2a00-a041-375e-e400-7901-7d63-efc2-d8f6.ngrok-free.app"
+application_url = "https://fe93-2a00-a041-375e-e400-e4e7-26c-fea8-ed51.ngrok-free.app"
 embedded = true
 
 [access_scopes]
@@ -11,10 +11,10 @@ scopes = "read_products,write_products"
 
 [auth]
 redirect_urls = [
-  "https://6425-2a00-a041-375e-e400-7901-7d63-efc2-d8f6.ngrok-free.app/auth/callback",
-  "https://6425-2a00-a041-375e-e400-7901-7d63-efc2-d8f6.ngrok-free.app/auth/shopify/callback",
-  "https://6425-2a00-a041-375e-e400-7901-7d63-efc2-d8f6.ngrok-free.app/api/auth/callback",
-  "https://6425-2a00-a041-375e-e400-7901-7d63-efc2-d8f6.ngrok-free.app/.shopify/graphiql/auth/callback"
+  "https://fe93-2a00-a041-375e-e400-e4e7-26c-fea8-ed51.ngrok-free.app/auth/callback",
+  "https://fe93-2a00-a041-375e-e400-e4e7-26c-fea8-ed51.ngrok-free.app/auth/shopify/callback",
+  "https://fe93-2a00-a041-375e-e400-e4e7-26c-fea8-ed51.ngrok-free.app/api/auth/callback",
+  "https://fe93-2a00-a041-375e-e400-e4e7-26c-fea8-ed51.ngrok-free.app/.shopify/graphiql/auth/callback"
 ]
 
 [webhooks]

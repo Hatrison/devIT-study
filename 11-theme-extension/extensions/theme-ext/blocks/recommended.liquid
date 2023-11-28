@@ -1,0 +1,19 @@
+<span style="color:{{ block.settings.colour }}">
+  {% render 'products' %}
+</span>
+
+{% schema %}
+{
+  "name": "Recommended Products",
+  "target": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Recommended Products"
+    }
+  ]
+}
+{% endschema %}
+

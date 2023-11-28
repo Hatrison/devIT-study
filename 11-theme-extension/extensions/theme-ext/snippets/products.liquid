@@ -1,0 +1,63 @@
+<div class="section">
+    <h2>{{ block.settings.title }}</h2>
+
+    <div class="recommended-products">
+        {% for collection in collections %}
+            {% for product in collection.products limit: 1 %}
+                <div class="recommended-product">
+                    <img src="{{ product.featured_image.src | img_url: 'medium' }}" alt="{{ product.title }}">
+                    <h3>{{ product.title }}</h3>
+                    <p>{{ product.price | money }}</p>
+                    <a href="{{ product.url }}">{{ 'product.button' | t }}</a>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .recommended-products {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .recommended-product {
+        width: 30%;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .recommended-product img {
+        width: 100%;
+    }
+
+    .recommended-product h3 {
+        font-size: 1em;
+        margin: 10px 0;
+    }
+
+    .recommended-product p {
+        font-size: 1em;
+        margin: 10px 0;
+    }
+
+    .recommended-product a {
+        display: inline-block;
+        padding: 10px 20px;
+        background: #000;
+        color: #fff;
+        text-decoration: none;
+        font-size: 1em;
+        margin-top: auto;
+        width: fit-content;
+    }
+</style>
