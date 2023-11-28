@@ -1,0 +1,50 @@
+{% if template == 'index' %}
+    {% render 'modal' %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Modal",
+  "target": "body",
+  "stylesheet": "modal.css",
+  "javascript": "modal.js",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Happy New Year!"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description",
+      "default": "Get 20% off your next order with code NEWYEAR2024"
+    },
+    {
+      "type": "text",
+      "id": "buttonText",
+      "label": "Button",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "buttonUrl",
+      "label": "Button URL",
+      "default": "/collections/all"
+    },
+    {
+      "type": "text",
+      "id": "imageUrl",
+      "label": "Image URL",
+      "default": "https://cdn.shopify.com/s/files/1/0558/2373/0474/files/hero-1.jpg?v=1609456549"
+    },
+    {
+      "type": "text",
+      "id": "textColor",
+      "label": "Text color",
+      "default": "#000000"
+    }
+  ]
+}
+{% endschema %}
